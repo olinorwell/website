@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Designing and building a digital kitchen timer — Oli Norwell</title>
+<meta name="description" content="In this project I plan to design and build a kitchen timer. We don&#39;t have one in our kitchen and it feels like the perfect project for a hot August weekend. I&#39;m writing this blog post while I&#39;m building the device…">
+<link rel="canonical" href="https://www.olinorwell.com/designing-and-building-a-digital-kitchen-timer/">
+<meta name="theme-color" content="#020702">
+<meta name="color-scheme" content="dark">
+<meta property="og:site_name" content="Oli Norwell">
+<meta property="og:url" content="https://www.olinorwell.com/designing-and-building-a-digital-kitchen-timer/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Designing and building a digital kitchen timer">
+<meta property="og:description" content="In this project I plan to design and build a kitchen timer. We don&#39;t have one in our kitchen and it feels like the perfect project for a hot August weekend. I&#39;m writing this blog post while I&#39;m building the device…">
+<meta property="og:image" content="https://www.olinorwell.com/media/2020/08/20200809_195647-scaled-e1597402570329-1200.jpg"><meta property="article:published_time" content="2020-08-14T16:58:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/vt323-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v=4d25261308">
+<link rel="stylesheet" href="/assets/phosphor.css?v=4d25261308">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Oli Norwell" href="/feed.xml">
+<script src="/assets/site.js?v=4d25261308" defer></script>
+</head>
+<body class="theme-phosphor ">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="Oli Norwell — home">
+      <span class="brand__chip" aria-hidden="true">ON</span>
+      <span class="brand__name">Oli Norwell</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/articles/"><span class="nav__dot">./</span>articles</a>
+      <a href="/projects/"><span class="nav__dot">./</span>projects</a>
+      <a href="/feed.xml"><span class="nav__dot">./</span>rss</a>
+      <a href="/contact-me/"><span class="nav__dot">./</span>about</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="">
+<article class="post">
+  <header class="post__header wrap">
+    <p class="crumbs"><a href="/">~</a>/<a href="/">blog</a>/<span>designing-and-building-a-digital-kitchen-timer</span></p>
+    <h1 class="post__title">Designing and building a digital kitchen timer</h1>
+    <p class="post__meta">
+      <time datetime="2020-08-14T16:58:00">14 Aug 2020</time>
+      <span class="dim">//</span> 25 min read
+<span class="dim">//</span> <a href="#comments">2 comments</a>      
+    </p>
+    <p class="tags"><a class="tag" href="/category/electronics/">#electronics</a><a class="tag" href="/category/fun/">#fun</a><a class="tag" href="/category/programming/">#software-development</a></p>
+  </header>
+
+
+  <nav class="toc wrap-prose" aria-label="Contents">
+    <details>
+      <summary>contents <span class="dim">[10]</span></summary>
+      <ol><li><a href="#stage-1-brainstorming-ideas">Stage 1 - Brainstorming ideas</a></li><li><a href="#stage-2-determining-user-actions">Stage 2 - Determining user actions</a></li><li><a href="#stage-3-mapping-controls-to-actions">Stage 3 - Mapping controls to actions</a></li><li><a href="#stage-4-planning-the-code">Stage 4 - Planning the code</a></li><li><a href="#stage-5-building-a-prototype">Stage 5 - Building a prototype</a></li><li><a href="#day-2-building-the-kitchen-timer-device">Day 2 - Building the kitchen timer device</a></li><li><a href="#stage-6-the-battery-backpack">Stage 6 - The battery backpack</a></li><li><a href="#stage-7-building-the-front-section">Stage 7 - building the front section</a></li><li><a href="#ideas-for-improvements">Ideas for improvements</a></li><li><a href="#summary">Summary</a></li></ol>
+    </details>
+  </nav>
+
+  <div class="prose">
+<p>In this project I plan to design and build a kitchen timer. We don't have one in our kitchen and it feels like the perfect project for a hot August weekend. I'm writing this blog post while I'm building the device, hopefully this will make it more interesting as I'm sure I'll come up against some problems and this will document solutions that I find.</p>
+<p>The basic requirement is a device that allows a countdown timer to be set, for a certain number of minutes and seconds, after which the device audibly and visually alerts that the countdown is complete.</p>
+<h2 id="stage-1-brainstorming-ideas"><a aria-hidden="true" class="h-anchor" href="#stage-1-brainstorming-ideas" tabindex="-1">#</a>Stage 1 - Brainstorming ideas</h2>
+<p>Firstly - let's brainstorm the key components that we know will be used in our device.</p>
+<p><strong>Clock</strong> - a display showing visually how many minutes/seconds are left in the countdown</p>
+<p><strong>On/Off switch</strong> - a switch that turns power to the device on and off</p>
+<p><strong>Several buttons</strong> to set mode / start and stop timer</p>
+<p><strong>Speaker</strong> - for an audible alarm at the end of the countdown</p>
+<p><strong>Lights</strong> - for a visual alarm at the end of the countdown and to show the mode status</p>
+<p><strong>Battery pack</strong> - to power the device as it needs to be portable</p>
+<p><strong>Project box</strong> - the device needs to be contained inside a small box which can survive in a kitchen setting</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2020/08/20200808_125137-scaled-e1597402160782-1420.webp"><img alt="Components that I will use" decoding="async" height="1529" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2020/08/20200808_125137-scaled-e1597402160782-800.webp" srcset="/media/2020/08/20200808_125137-scaled-e1597402160782-480.webp 480w, /media/2020/08/20200808_125137-scaled-e1597402160782-800.webp 800w, /media/2020/08/20200808_125137-scaled-e1597402160782-1200.webp 1200w, /media/2020/08/20200808_125137-scaled-e1597402160782-1420.webp 1420w" width="1420"/></a><figcaption>I grabbed some components that I think could be used in the device</figcaption></figure>
+<p>This will be my first portable device. I have some Lithium ion polymer batteries and charging modules, so I can use them along with a step-up convertor to get a steady 5 volts for my microcontroller. All my previous devices needed to be connected to a USB socket, so this will be an exciting step forward for me.</p>
+<h2 id="stage-2-determining-user-actions"><a aria-hidden="true" class="h-anchor" href="#stage-2-determining-user-actions" tabindex="-1">#</a>Stage 2 - Determining user actions</h2>
+<p>Next - let's list the actions that the user will want to execute when interfacing with our device. Once we know these we can determine what physical controls our device needs.</p>
+<p><strong>Power on</strong> - give power to the device, start it up<br/>
+<strong>Power off</strong> - cut power to the device, turn it off<br/>
+<strong>Start timer</strong> - begin our countdown timer<br/>
+<strong>Pause timer</strong> - pause our countdown timer<br/>
+<strong>Reset timer</strong> - set the timer to 0<br/>
+<strong>Increase countdown mins</strong> - adjust the countdown timer on the device<br/>
+<strong>Increase countdown seconds</strong> - adjust the countdown timer on the device<br/>
+<strong>Decrease countdown mins</strong> - adjust the countdown timer on the device<br/>
+<strong>Decrease countdown seconds</strong> - adjust the countdown timer on the device</p>
+<h2 id="stage-3-mapping-controls-to-actions"><a aria-hidden="true" class="h-anchor" href="#stage-3-mapping-controls-to-actions" tabindex="-1">#</a>Stage 3 - Mapping controls to actions</h2>
+<p>Now - let's decide how our physical controls can initiate those actions.</p>
+<p><strong>Power on</strong> - turn power switch to the right<br/>
+<strong>Power off</strong> - turn power switch to the left<br/>
+<strong>Start timer</strong> - press a button<br/>
+<strong>Pause timer</strong> - press a button<br/>
+<strong>Reset timer</strong> - hold down a button<br/>
+<strong>Increase countdown mins</strong> - rotary encoder turn right<br/>
+<strong>Increase countdown seconds</strong> - rotary encoder turn right<br/>
+<strong>Decrease countdown mins</strong> - rotary encoder turn left<br/>
+<strong>Decrease countdown seconds</strong> - rotary encoder turn left</p>
+<p>When creating an MVP (minimum viable product) we should try to limit the number of physical items as much as we possibly can. Every additional button will make our device more complex to build, and increase the risk of problems occuring.</p>
+<p>I will be using an Arduino Nano compatible device. I'm sure many kitchen timers out there don't use microcontrollers as powerful as the ATmega328 on an Arduino Nano board, for sure it's overkill, but from a hobbyist's point of view it's much cheaper and sensible to use a $3 Nano than attempt to use several more specific ICs and transistors along with a custom PCB.</p>
+<p>Basically, yes if you were to design a device for mass production you would not base it on an Arduino Nano. For a hobby project with limited production numbers this is the way to go.</p>
+<h2 id="stage-4-planning-the-code"><a aria-hidden="true" class="h-anchor" href="#stage-4-planning-the-code" tabindex="-1">#</a>Stage 4 - Planning the code</h2>
+<p>Now let's write some pseudo-code to figure out what we need to do on the ATmega328 processor.</p>
+<p><strong>Setup function:</strong></p>
+<ul>
+<li>Reset state to set timer - <em>when you turn the device on, it should be ready to set-up</em></li>
+<li>Reset state for 'what we are editing' - <em>we will start by editing minutes</em></li>
+<li>Set pins to input/output where required - <em>ready to send or receive messages</em></li>
+</ul>
+<p>Initialise any additional libraries we will use - <em>we will use 3rd party libraries to speed up development<br/>
+</em><strong><br/>
+Looping function<br/>
+</strong><br/>
+If the rotary encoder button is pressed - change what we are editing - from the minutes to the seconds and back</p>
+<ul>
+<li>If the rotary encoder is rotated - change the number we have for minutes/seconds - <em>up or down depending on the direction the encoder was turned</em></li>
+<li>If the button is pressed change our state from setting the countdown timer start time to running the countdown, if we are in countdown mode, pause the countdown</li>
+<li>If the reset button is pressed, return us to the set timer mode with the countdown we started from</li>
+<li>If we are in the countdown mode - reduce the time if a second has passed.</li>
+<li>If we are in the countdown mode - If the time runs out, then make an audible sound and set state to end</li>
+<li>If we are in the end state keep making a noise until the device is reset</li>
+</ul>
+<p>The question here is, how many buttons do we need. We could make do with one button, with the device resetting if the user holds the button down for several seconds. As I want to limit the amount of physical items for this MVP version, I will stick to one button.</p>
+<h2 id="stage-5-building-a-prototype"><a aria-hidden="true" class="h-anchor" href="#stage-5-building-a-prototype" tabindex="-1">#</a>Stage 5 - Building a prototype</h2>
+<p>The next step is to create a prototype, on which we can write the software and confirm that we are capable of developing such a device, before constructing too much in the way of hardware. We can see how the device functions and if we need to make further hardware adjustments.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/08/20200808_184006-scaled-e1597420986833-1996.webp"><img alt="" decoding="async" height="1612" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/08/20200808_184006-scaled-e1597420986833-800.webp" srcset="/media/2020/08/20200808_184006-scaled-e1597420986833-480.webp 480w, /media/2020/08/20200808_184006-scaled-e1597420986833-800.webp 800w, /media/2020/08/20200808_184006-scaled-e1597420986833-1200.webp 1200w, /media/2020/08/20200808_184006-scaled-e1597420986833-1600.webp 1600w, /media/2020/08/20200808_184006-scaled-e1597420986833-1996.webp 1996w" width="1996"/></a><figcaption>Testing the RGB LED on my prototype</figcaption></figure>
+<p>As you can see I have constructed a prototype on a breadboard. I'm using a smaller display and a different type of button. Before doing any actual construction of the device it is critical to know that it will work. It's much easier to add/remove buttons/components now than do it with the device half built!</p>
+<p>I built the prototype one component at a time, and I highly recommend this course of action. Firstly I connected up my 4-digit display and ensured that I could set whatever value I wanted. I used this third party library that I found on the Internet - <a href="https://github.com/AKJ7/TM1637" rel="noopener" target="_blank">https://github.com/AKJ7/TM1637</a> - now there is part of me that wanted to get the datasheet for the display and build my own code to set digit values, but then I reminded myself that this weekend is about building a kitchen timer not about writing a TM1637 library.</p>
+<p>Using a library to simplify using a component is a great time saver, although it does feel somewhat like cheating to me. Though in reality I guess I just have to accept that as the famous saying goes, "I can see further because I'm standing on the shoulders of giants". Libraries such as this one allow us to plug in our display and be up and running a couple of minutes later with just a couple of lines of code. This makes the coding part of the project a bit easier than it would be without using a library containing functions to easily manipulate the display module.</p>
+<p>You might have noticed that I am now talking in the past tense. Building the prototype was enough work without updating this post in real time. The prototype is now working very nicely.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/08/20200808_205312-2000.webp"><img alt="An early breadboard prototype" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/08/20200808_205312-800.webp" srcset="/media/2020/08/20200808_205312-480.webp 480w, /media/2020/08/20200808_205312-800.webp 800w, /media/2020/08/20200808_205312-1200.webp 1200w, /media/2020/08/20200808_205312-1600.webp 1600w, /media/2020/08/20200808_205312-2000.webp 2000w" width="2000"/></a><figcaption>An early breadboard prototype</figcaption></figure>
+<p>After connecting the display I connected a speaker module that I got in a collection of 'Arduino sensors'. The default 'tone()' function in the Arduino libraries is fairly quiet and so I went on an Internet search to find a way to make more noise. I discovered the toneAC library - <a href="https://github.com/teckel12/arduino-toneac" rel="noopener" target="_blank">https://github.com/teckel12/arduino-toneac</a> - this library has you connecting the speaker to two IO pins on the Arduino rather than one IO pin and ground. The great thing about this library is that it allows you to make much louder sounds with the same speakers.</p>
+<p>With both the ToneAC library and the TM1637 library I uploaded a sample script to my Nano to test the functionality, this was much faster than adding library code to my countdown timer program then testing to see if the library was to my liking.</p>
+<p>The button and LED components are very straightforward to use and I was able to take code from my earlier projects. Buttons are simple once you've figured out a decent way to 'debounce' them. This is a phenomena where by a button is pressed but due to the way the button completes the circuit at the moment on impact there is typically a bit of fluttering of pressed/not pressed for a few milliseconds. If you don't deal with this properly then your program will take readings that suggest that the button has been pressed about 10 times for every time it is actually pressed.</p>
+<p>All that my 'de-bouncing' code does is remembers when we last changed the button state and wait 50 milliseconds until treating any other state change as a legit change.</p>
+<p>Getting to this point has taken a whole afternoon. Tomorrow I will return and build the device itself inside the project box.</p>
+<p>Here is a video of the current state of the device - as you can see there are some issues - for one I am ending the timer when the second goes down to 0 when I should wait one more second. Also currently it's a fixed 15 second countdown timer, which isn't very useful beyond heating up tortillas. That's because I haven't added the code to read the rotary encoder values yet.</p>
+<div class="embed" style="aspect-ratio: 640 / 360; max-width: calc(80vh * 640 / 360)"><iframe allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen="" loading="lazy" src="https://player.vimeo.com/video/447858084" title="Embedded video"></iframe></div>
+<h2 id="day-2-building-the-kitchen-timer-device"><a aria-hidden="true" class="h-anchor" href="#day-2-building-the-kitchen-timer-device" tabindex="-1">#</a>Day 2 - Building the kitchen timer device</h2>
+<p>I have just completed the code for reading the rotary encoder. It's very straightforward and I would recommend following a tutorial online if you don't know how they work. They let us determine which direction the knob is being rotated. We take one direction to represent an increase, and the other direction to be a decrease.</p>
+<p>With that done the source code is now pretty much complete - here is what I came up with. (<a href="https://github.com/ozzeruk/DigitalCountdownTimer" rel="noopener" target="_blank">I have uploaded this to Github as well</a>)</p>
+
+<div class="code"><div class="code__bar"><span class="code__lang">C++</span></div><pre tabindex="0"><code><span class="c1">// COUNTDOWN TIMER</span>
+<span class="c1">// Written by Oli Norwell - August 2020</span>
+<span class="c1">// www.olinorwell.com</span>
+<span class="c1">// Tutorial: https://www.olinorwell.com/designing-and-building-a-digital-kitchen-timer</span>
+<span class="c1">// MIT licence - do whatever you want with it - it would be nice to hear if you have improved it</span>
+<span class="c1">//</span>
+<span class="c1">// We split the code into modules</span>
+<span class="c1">//</span>
+<span class="c1">// Countdown - everything to do with an actual countdown</span>
+<span class="c1">// Rotary Encoder - everything to do with the rot enc that sets our start time</span>
+<span class="c1">// Sound - everything to do with the sound we output</span>
+<span class="c1">// Display - everything to do with the 7 seg 4 digit display</span>
+
+<span class="c1">//#define DEBUG		// if this is active then we output messages through serial</span>
+
+<span class="c1">// Countdown state</span>
+<span class="cp">#define COUNTDOWN_SETUP     0</span>
+<span class="cp">#define COUNTDOWN_ACTIVE    1</span>
+<span class="cp">#define COUNTDOWN_PAUSED    2</span>
+<span class="cp">#define COUNTDOWN_END       3</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">countdownState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COUNTDOWN_SETUP</span><span class="p">;</span><span class="w">		</span><span class="c1">// begin with us ready to set a countdown time</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">countdownMins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">				</span><span class="c1">// current mins to go</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">countdownSecs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span><span class="w">				</span><span class="c1">// current secs to go</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">countdownStartMins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">			</span><span class="c1">// what did we start with? used when resetting</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">countdownStartSecs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span>
+
+<span class="kt">long</span><span class="w"> </span><span class="n">lastCountdownChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">			</span><span class="c1">// how long since we adjusted the countdown</span>
+
+<span class="c1">// Timer button</span>
+<span class="cp">#define BUT_PIN           4			</span><span class="c1">// where is our button connected (other end to ground)</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">butLastChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">				</span><span class="c1">// when did we last register a state change?</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">butLastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LOW</span><span class="p">;</span><span class="w">				</span><span class="c1">// what was the last state of the button?</span>
+
+<span class="c1">// Rotary Encoder (https://en.wikipedia.org/wiki/Rotary_encoder)</span>
+<span class="cp">#define ROT_UPDATE_MINS   0			</span><span class="c1">// Mode to edit mins</span>
+<span class="cp">#define ROT_UPDATE_SECS   1			</span><span class="c1">// Mode to edit seconds</span>
+
+<span class="cp">#define ROT_PIN_A       12			</span><span class="c1">// Pin that pin A of rot enc is connected to</span>
+<span class="cp">#define ROT_PIN_B       13			</span><span class="c1">// Pin that pin B of rot enc is connected to</span>
+<span class="cp">#define ROT_PIN_BUT     11			</span><span class="c1">// Pin that button pin of rot enc is connect to (other to ground)</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">rotPinAState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">				</span><span class="c1">// State of pin A of rot enc</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">rotPinBState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">				</span><span class="c1">// State of pin B of rot enc</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">rotPinALastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">			</span><span class="c1">// Previous state of pin A (we don't care for B)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">rotWhichUpdate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ROT_UPDATE_MINS</span><span class="p">;</span><span class="w">		</span><span class="c1">// what is it currently updated? mins or secs?</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">rotButState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">				</span><span class="c1">// State of the rot enc button</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">rotButLastChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">			</span><span class="c1">// when was the button state last changed?</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">rotButLastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HIGH</span><span class="p">;</span><span class="w">			</span><span class="c1">// previous state of rot enc button</span>
+
+<span class="c1">// Display (I am using a fairly large 4 digit 7 segment display with the TM1637 IC)</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;TM1637.h&gt;</span><span class="w">				</span><span class="c1">// https://github.com/AKJ7/TM1637</span>
+<span class="n">TM1637</span><span class="w"> </span><span class="nf">tm1637</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span><span class="w">				</span><span class="c1">// Initialise library pin 2 to clock, pin 3 to DIO</span>
+
+<span class="c1">// RGB LED light - an LED with 4 pins, RGB and ground</span>
+<span class="cp">#define LED_MODE_NOTHING        0		</span><span class="c1">// what state our LED is in, which determines its colour</span>
+<span class="cp">#define LED_MODE_SETUP          1</span>
+<span class="cp">#define LED_MODE_COUNTDOWN      2</span>
+<span class="cp">#define LED_MODE_PAUSED         3</span>
+<span class="cp">#define LED_MODE_END            4</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">ledMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LED_MODE_NOTHING</span><span class="p">;</span><span class="w">			</span><span class="c1">// store our current state</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">ledModeLastChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">			</span><span class="c1">// used for blinking lights (not done yet)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">ledModeBlinking</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">			</span><span class="c1">// used for blinking lights (not done yet)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">ledPinR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">				</span><span class="c1">// pin on Arduino connected to LED R pin</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">ledPinB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w">				</span><span class="c1">// pin on Arduino connected to LED B pin</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">ledPinG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w">				</span><span class="c1">// pin on Arduino connected to LED G pin</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">updateLED</span><span class="p">();</span><span class="w">				</span><span class="c1">// Function to update the state of the light</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setLEDMode</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">mode</span><span class="p">);</span><span class="w">			</span><span class="c1">// Function to set the state of the light</span>
+
+<span class="c1">// Sound</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;toneAC.h&gt;</span><span class="w">         </span><span class="c1">// ToneAC library - which allows us to get a louder tone than the Arduino library</span>
+<span class="w">				</span><span class="c1">// https://github.com/teckel12/arduino-toneac</span>
+
+<span class="cp">#define SOUND_MODE_SILENCE      0</span>
+<span class="cp">#define SOUND_MODE_ALARM        1</span>
+
+<span class="cp">#define SOUND_STATE_SILENCE     0</span>
+<span class="cp">#define SOUND_STATE_TONE1       1</span>
+<span class="cp">#define SOUND_STATE_SILENCE2    2</span>
+<span class="cp">#define SOUND_STATE_TONE2       3</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">soundMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SOUND_MODE_SILENCE</span><span class="p">;</span><span class="w">      </span><span class="c1">// By default we sit in silence</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">soundState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SOUND_STATE_SILENCE</span><span class="p">;</span><span class="w">	 </span><span class="c1">// By default silence</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">soundFreq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2100</span><span class="p">;</span><span class="w">			 </span><span class="c1">// our starting frequency</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">soundDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">			 </span><span class="c1">// If frequency is getting higher or lower</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">soundLastUpdate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">		 </span><span class="c1">// when did we last update the sound frequency</span>
+
+<span class="c1">// Function to setup the LED output pins</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setupLED</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">ledPinR</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span><span class="w">  </span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">ledPinB</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span><span class="w">  </span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">ledPinG</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span><span class="w">  </span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// function to set the LED mode</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setLEDMode</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">mode</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">ledMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Update the LED - depending on the mode decide what our LED pins should output to the component</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">updateLED</span><span class="p">()</span>
+<span class="p">{</span>
+
+<span class="w">  </span><span class="c1">// depending on the LED mode we create a different colour on our RGB LED component</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">ledMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LED_MODE_NOTHING</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinR</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinB</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinG</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">ledMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LED_MODE_SETUP</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinR</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinB</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinG</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">ledMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LED_MODE_COUNTDOWN</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinR</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinB</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinG</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">ledMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LED_MODE_PAUSED</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinR</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinB</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinG</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">ledMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LED_MODE_END</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinR</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinB</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">    </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">ledPinG</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Function to setup our button</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setupBut</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">BUT_PIN</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">BUT_PIN</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span><span class="w"> </span><span class="c1">// Input with a pull-up resistor (so high when not connected to ground physically by the button)</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Function to deal with our main button being pressed</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">butPressed</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="c1">// This adjusts the state of our device, which uses a finite state machine with 4 different possible states</span>
+
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">countdownState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">COUNTDOWN_SETUP</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// If we are in the setup mode, then set our mode to active so the countdown can begin</span>
+<span class="w">    </span><span class="n">countdownStartMins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">countdownMins</span><span class="p">;</span>
+<span class="w">    </span><span class="n">countdownStartSecs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">countdownSecs</span><span class="p">;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">countdownState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COUNTDOWN_ACTIVE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">setLEDMode</span><span class="p">(</span><span class="n">LED_MODE_COUNTDOWN</span><span class="p">);</span><span class="w">	</span><span class="c1">// change what the LED state is</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">countdownState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">COUNTDOWN_ACTIVE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// If we are currently in the active countdown mode - move us to the paused state</span>
+<span class="w">    </span><span class="n">countdownState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COUNTDOWN_PAUSED</span><span class="p">;</span>
+<span class="w">    </span><span class="n">setLEDMode</span><span class="p">(</span><span class="n">LED_MODE_PAUSED</span><span class="p">);</span><span class="w">	</span><span class="c1">// change what the LED state is</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">countdownState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">COUNTDOWN_PAUSED</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// If we are currently in the paused countdown mode - move us back to the active state</span>
+<span class="w">    </span><span class="n">countdownState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COUNTDOWN_ACTIVE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">setLEDMode</span><span class="p">(</span><span class="n">LED_MODE_COUNTDOWN</span><span class="p">);</span><span class="w">	</span><span class="c1">// change what the LED state is</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">countdownState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">COUNTDOWN_END</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// If our countdown is already over, then move us back to the setup stage</span>
+<span class="w">    </span><span class="n">setLEDMode</span><span class="p">(</span><span class="n">LED_MODE_SETUP</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">killSound</span><span class="p">();</span><span class="w">			</span><span class="c1">// stop our alarm sound</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">countdownState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COUNTDOWN_SETUP</span><span class="p">;</span><span class="w">	</span><span class="c1">// reset values ready for the setup state again</span>
+<span class="w">    </span><span class="n">countdownMins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">countdownStartMins</span><span class="p">;</span>
+<span class="w">    </span><span class="n">countdownSecs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">countdownStartSecs</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Function to update our main button state</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">updateBut</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="c1">// This is my simple debouncing code, that will ensure 50ms have passed before</span>
+<span class="w">  </span><span class="c1">// allowing further state changes</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">butLastChange</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">50</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">BUT_PIN</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">butLastState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">HIGH</span><span class="p">)</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="n">butLastChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+<span class="w">        </span><span class="n">butLastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LOW</span><span class="p">;</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="n">butPressed</span><span class="p">();</span><span class="w">		</span><span class="c1">// run the function for a button press</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="n">butLastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HIGH</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Function to setup the rotary encoder</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setupRotEnc</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">ROT_PIN_A</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span><span class="w">		</span><span class="c1">// Input with an internal pull-up resistor</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">ROT_PIN_B</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span><span class="w">		</span><span class="c1">// Input with an internal pull-up resistor</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">ROT_PIN_BUT</span><span class="p">,</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span><span class="w"> 		</span><span class="c1">// Button with an internal pull-up resistor</span>
+<span class="w">  </span><span class="c1">// this means that when not doing anything the value will be pulled to high</span>
+
+<span class="w">  </span><span class="n">rotPinALastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digitalRead</span><span class="p">(</span><span class="n">ROT_PIN_A</span><span class="p">);</span><span class="w">	</span><span class="c1">// see what the current value is and set to first old value</span>
+
+<span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Function to deal with the rot enc button being pressed</span>
+<span class="c1">// the user can push in the rotary encoder dial to press the button</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">rotButPressed</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="c1">// all we do is change what was being edited, from mins to secs and back</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">rotWhichUpdate</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ROT_UPDATE_MINS</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">      </span><span class="n">rotWhichUpdate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ROT_UPDATE_SECS</span><span class="p">;</span><span class="w">  </span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">      </span><span class="n">rotWhichUpdate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ROT_UPDATE_MINS</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="c1">// Note: I plan to add a 'reset' option if the button has been held down</span>
+<span class="c1">// for say over 3 seconds, this isn't yet implemented</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Function to deal with the rot enc decreasing our value</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">rotUpdateSettingDown</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="c1">// Depending on what we are currently updating, make the change</span>
+<span class="c1">// but only if mins or secs are larger than 0</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">rotWhichUpdate</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ROT_UPDATE_MINS</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">countdownMins</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">countdownMins</span><span class="o">--</span><span class="p">;</span><span class="w"> </span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">rotWhichUpdate</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ROT_UPDATE_SECS</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">countdownSecs</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">countdownSecs</span><span class="o">--</span><span class="p">;</span><span class="w"> </span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Function to deal with the rot enc increasing our value</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">rotUpdateSettingUp</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="c1">// Depending on what we are currently updating, make the change</span>
+<span class="c1">// but only if the mins are less than 99 or seconds less than 59</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">rotWhichUpdate</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ROT_UPDATE_MINS</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">countdownMins</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">99</span><span class="p">)</span><span class="w"> </span><span class="n">countdownMins</span><span class="o">++</span><span class="p">;</span><span class="w"> </span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">rotWhichUpdate</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ROT_UPDATE_SECS</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">countdownSecs</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">59</span><span class="p">)</span><span class="w"> </span><span class="n">countdownSecs</span><span class="o">++</span><span class="p">;</span><span class="w"> </span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Update our rotary encoder</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">updateRotEnc</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="n">rotPinAState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digitalRead</span><span class="p">(</span><span class="n">ROT_PIN_A</span><span class="p">);</span><span class="w">		</span><span class="c1">// Grab the state of pin A</span>
+<span class="w">   </span><span class="n">rotPinBState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digitalRead</span><span class="p">(</span><span class="n">ROT_PIN_B</span><span class="p">);</span><span class="w">		</span><span class="c1">// Grab the state of pin B</span>
+
+<span class="w">   </span><span class="c1">// If pin A has changed state - then depending on whether it is now the same as B or not we can see what way it was turned</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">rotPinAState</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">rotPinALastState</span><span class="p">)</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">       </span><span class="k">if</span><span class="p">(</span><span class="n">rotPinBState</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">rotPinAState</span><span class="p">)</span>
+<span class="w">       </span><span class="p">{</span>
+<span class="w">          </span><span class="n">rotUpdateSettingDown</span><span class="p">();</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">       </span><span class="k">else</span><span class="w"> </span>
+<span class="w">       </span><span class="p">{</span>
+<span class="w">         </span><span class="n">rotUpdateSettingUp</span><span class="p">();</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+
+<span class="w">   </span><span class="c1">// Record the state as the new 'old state'</span>
+<span class="w">   </span><span class="n">rotPinALastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rotPinAState</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Rot button - with simple de-bouncing code - ensuring we wait 50ms before accepting a change of state</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">rotButLastChange</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">50</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">ROT_PIN_BUT</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">rotButLastState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">HIGH</span><span class="p">)</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="n">rotButLastChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span>
+<span class="w">        </span><span class="n">rotButLastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LOW</span><span class="p">;</span>
+<span class="w">        </span><span class="n">rotButPressed</span><span class="p">();</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="n">rotButLastState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HIGH</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">   </span>
+<span class="w">   </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Setup our display using the 3rd party library we have chosen to use</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setupDisplay</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">tm1637</span><span class="p">.</span><span class="n">init</span><span class="p">();</span><span class="w">			</span><span class="c1">// Init the display</span>
+<span class="w">    </span><span class="n">tm1637</span><span class="p">.</span><span class="n">setBrightness</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span><span class="w">		</span><span class="c1">// Set a medium brightness</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Update our display - the 4 digit value we want to put on the display is the mins * 100 + secs</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">updateDisplay</span><span class="p">()</span>
+<span class="p">{</span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">countdownMins</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="w">  </span><span class="n">val</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">countdownSecs</span><span class="p">;</span>
+
+<span class="w">	</span><span class="c1">// e.g. 3 mins 40 secs.... 3 * 100 = 300 + 40 = 0340 for the display.</span>
+<span class="w">	</span><span class="c1">// 15 mins 8 secs = 15 * 100 = 1500 + 8 = 1508 for the display</span>
+
+<span class="w">    </span><span class="n">tm1637</span><span class="p">.</span><span class="n">display</span><span class="p">(</span><span class="n">val</span><span class="p">);</span><span class="w">	</span><span class="c1">// Using the library we are using we can simply send it a value to display</span>
+
+<span class="w">    </span><span class="c1">// note: I haven't set the : in the centre of the display - this was an oversight but could be easily added</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Stop making sound</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">killSound</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">toneAC</span><span class="p">();</span><span class="w">				</span><span class="c1">// Set sound to nothing</span>
+<span class="w">  </span><span class="n">soundMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SOUND_MODE_SILENCE</span><span class="p">;</span><span class="w">   	</span><span class="c1">// Set our sound mode to silence</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Update our sound module</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">updateSound</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">soundMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SOUND_MODE_SILENCE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// The sound of silence....</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">soundMode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SOUND_MODE_ALARM</span><span class="p">)</span><span class="w"> </span><span class="c1">// We are in alarm mode, tweak our noise</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">  	</span><span class="c1">// Note how this is a finite state machine and isn't blocking. We change the tone every so often</span>
+<span class="w">  	</span><span class="c1">// but the rest of our program continues while we are making noise - useful if we added features such</span>
+<span class="w">  	</span><span class="c1">// as a network connection which we'd need to give time to.</span>
+<span class="w">  </span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">soundLastUpdate</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w">	</span><span class="c1">// Every 100ms we adjust the tone</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="n">soundLastUpdate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span><span class="w">		</span><span class="c1">// Mark when we are making this change</span>
+<span class="w">      </span>
+<span class="w">        </span><span class="c1">// Change state depending on current sound state</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">soundState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SOUND_STATE_SILENCE</span><span class="p">)</span><span class="w"> </span><span class="c1">// We were silent - so this is us starting to make noise</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">soundDir</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">soundFreq</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="n">soundFreq</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">soundDir</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">soundFreq</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2300</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">soundDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">soundDir</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">false</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">soundFreq</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1900</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">soundDir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span>
+<span class="w">            </span><span class="c1">// move to playing tone1</span>
+<span class="w">            </span><span class="n">toneAC</span><span class="p">(</span><span class="n">soundFreq</span><span class="p">);</span>
+<span class="w">            </span><span class="n">soundState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SOUND_STATE_TONE1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">soundState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SOUND_STATE_TONE1</span><span class="p">)</span><span class="w"> </span><span class="c1">// We were making tone1, now be silent a bit</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">toneAC</span><span class="p">();</span>
+<span class="w">            </span><span class="n">soundState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SOUND_STATE_SILENCE2</span><span class="p">;</span><span class="w">	</span><span class="c1">// Go to the second silent mode</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">soundState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SOUND_STATE_SILENCE2</span><span class="p">)</span><span class="w"> </span><span class="c1">// We were having a silent moment, make noise again</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// move to playing tone1</span>
+<span class="w">            </span><span class="n">toneAC</span><span class="p">(</span><span class="mi">2100</span><span class="p">);</span>
+<span class="w">            </span><span class="n">soundState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SOUND_STATE_TONE2</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">soundState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SOUND_STATE_TONE2</span><span class="p">)</span><span class="w"> </span><span class="c1">// Return to the silence mode</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">toneAC</span><span class="p">();</span><span class="w">         </span>
+<span class="w">            </span><span class="n">soundState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SOUND_STATE_SILENCE</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Update our countdown</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">updateCountdown</span><span class="p">()</span>
+<span class="p">{</span>
+
+<span class="w">  </span><span class="c1">// If a second has passed then we update the countdown</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lastCountdownChange</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">lastCountdownChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span><span class="w">		</span><span class="c1">// Record when we made this change</span>
+
+<span class="w">    </span><span class="n">countdownSecs</span><span class="o">--</span><span class="p">;</span><span class="w">				</span><span class="c1">// Reduce seconds by 1</span>
+
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">countdownSecs</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> 			</span><span class="c1">// If seconds are now -1, then we have to reduce mins</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="n">countdownSecs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">59</span><span class="p">;</span><span class="w">			</span><span class="c1">// Set seconds to 59, which is what -1 really means to us</span>
+<span class="w">      </span><span class="n">countdownMins</span><span class="o">--</span><span class="p">;</span><span class="w">				</span><span class="c1">// Reduce minutes by 1</span>
+
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">countdownMins</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> 			</span><span class="c1">// If minutes is now -1, then we are done</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="n">countdownState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COUNTDOWN_END</span><span class="p">;</span><span class="w">		</span><span class="c1">// Set countdown state to the countdown having ended</span>
+<span class="w">        </span><span class="n">soundMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SOUND_MODE_ALARM</span><span class="p">;</span><span class="w">		</span><span class="c1">// Set the sound state to make a lot of noise</span>
+<span class="w">        </span><span class="n">countdownSecs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">			</span><span class="c1">// Set our countdown to 0 mins, 0 secs (as mins was -1)</span>
+<span class="w">        </span><span class="n">countdownMins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Our setup function - ran once on power up</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span>
+<span class="p">{</span>
+
+<span class="c1">// Enable serial debugging if we desire it</span>
+<span class="cp">#ifdef DEBUG</span>
+<span class="w">  </span><span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="cp">#endif</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c1">// Setup our various modules</span>
+<span class="w">  </span><span class="n">setupBut</span><span class="p">();</span>
+<span class="w">  </span><span class="n">setupRotEnc</span><span class="p">();</span>
+<span class="w">  </span><span class="n">setupDisplay</span><span class="p">();</span>
+<span class="w">  </span><span class="n">setLEDMode</span><span class="p">(</span><span class="n">LED_MODE_SETUP</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Our loop function - will run forever unless we cut the power or run out of it</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span>
+<span class="p">{</span>
+<span class="w">  </span><span class="c1">// Update the countdown, but only if we are actively counting down</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">countdownState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">COUNTDOWN_ACTIVE</span><span class="p">)</span><span class="w"> </span><span class="n">updateCountdown</span><span class="p">();</span>
+
+<span class="w">  </span><span class="c1">// Update our various modules</span>
+<span class="w">  </span><span class="n">updateRotEnc</span><span class="p">();</span>
+<span class="w">  </span><span class="n">updateDisplay</span><span class="p">();</span>
+<span class="w">  </span><span class="n">updateSound</span><span class="p">();</span>
+<span class="w">  </span><span class="n">updateBut</span><span class="p">();</span>
+<span class="w">  </span><span class="n">updateLED</span><span class="p">();</span>
+<span class="w">    </span>
+<span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Go luck if you decide to build this device! Let me know how you get on</span>
+</code></pre></div>
+<p>Building the device itself represents some different challenges from building the breadboard prototype. Primarily the need to convert a plastic box into a shell for an electrical device.</p>
+<h2 id="stage-6-the-battery-backpack"><a aria-hidden="true" class="h-anchor" href="#stage-6-the-battery-backpack" tabindex="-1">#</a>Stage 6 - The battery backpack</h2>
+<p>To power our kitchen timer we're going to use a rechargable battery. This will free our device from needing to be plugged in. As a kitchen timer this will mean it can be moved around at will and placed where it will be most useful.</p>
+<p>The batteries that I have though provide 3.7 volts, whereas the Arduino Nano needs a stable 5 volt input if powered directly. Not only is 3.7 volts not enough, as the battery loses charge that voltage will change. So we need to use a 'step-up' convertor, which takes a variable low voltage and boosts it up to the desired amount.</p>
+<p>I happened to have a module that takes a voltage of between about 1 and 4 volts and boosts it up to anything between 2 and 20 volts. I used a small screwdriver to adjust the output voltage to the 5 volts that we will need for this project.</p>
+<p>The countdown timer will need an on-off switch. As this will be connected to the feed from the battery, I've realised that it makes sense to have all the battery components located on the bottom part of the project box that I have. It splits in half nicely and then clicks back together.</p>
+<p>The on-off switch will need to poke through a hole in the top of the box. This hole is rectangular in size.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/08/20200809_125351-scaled-e1597402665332-1881.webp"><img alt="" decoding="async" height="1113" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/08/20200809_125351-scaled-e1597402665332-800.webp" srcset="/media/2020/08/20200809_125351-scaled-e1597402665332-480.webp 480w, /media/2020/08/20200809_125351-scaled-e1597402665332-800.webp 800w, /media/2020/08/20200809_125351-scaled-e1597402665332-1200.webp 1200w, /media/2020/08/20200809_125351-scaled-e1597402665332-1600.webp 1600w, /media/2020/08/20200809_125351-scaled-e1597402665332-1881.webp 1881w" width="1881"/></a><figcaption>Using masking tape to mark out where to drill/cut</figcaption></figure>
+<p>As you can see my method for creating hole in the project box is to stick some masking tape down first, then draw the shape of the hole that is needed. I then drill holes at the edges of the rectangle and use a box-cutter to remove what remains of the plastic. This isn't an exact science and I want to improve my technique, as the resulting hole wasn't exactly perfect.</p>
+<p>The battery is connected to a charging module which has a micro USB socket. This also needs to peep out of the project box. I did the same as with the on-off switch and cut out a rectangle on the left hand side of the box.</p>
+<p>I then used a hot-glue gun to apply a generous amount of hot glue to both items. If you haven't got a hot-glue gun I highly recommend getting one, they are fantastic for quickly connecting components that don't have useful holes for screws and stand-offs. It's not the perfect solution but in my experience the components are held strongly enough for hobby projects such as this one.</p>
+<p>Below is the completed 'battery pack' bottom compartment of the kitchen timer. The battery is held down with tape in case I need to remove it and replace it. The component on the right is the step-up/boost convertor which takes what we get from the battery and increases the voltage to 5v. The raised red and white cables are ready to be attached to the rest of the project.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/08/20200809_195658-scaled-e1597402612391-1817.webp"><img alt="bottom component / battery pack internals" decoding="async" height="1516" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/08/20200809_195658-scaled-e1597402612391-800.webp" srcset="/media/2020/08/20200809_195658-scaled-e1597402612391-480.webp 480w, /media/2020/08/20200809_195658-scaled-e1597402612391-800.webp 800w, /media/2020/08/20200809_195658-scaled-e1597402612391-1200.webp 1200w, /media/2020/08/20200809_195658-scaled-e1597402612391-1600.webp 1600w, /media/2020/08/20200809_195658-scaled-e1597402612391-1817.webp 1817w" width="1817"/></a><figcaption>The bottom of the kitchen timer, which houses the battery pack</figcaption></figure>
+<h2 id="stage-7-building-the-front-section"><a aria-hidden="true" class="h-anchor" href="#stage-7-building-the-front-section" tabindex="-1">#</a>Stage 7 - building the front section</h2>
+<p>With half the project complete and nicely outputting a stable 5v we can move onto building the front section. This of course will house the countdown timer, our button, our rotary encoder and the RGB LED light.</p>
+<p>As with the back of the timer I used masking tape to measure the hole for my 4-digit display. It was a pain to cut out, I drilled many holes then attempted to gouge out the rest of the plastic. I need to come up with a better technique for this. In the end I managed to get it the right size for the display to pop through. The holes for the speaker and LED were much easier. On the top of the device I then drilled two more holes, one on the left for my main control button, and then one on the right for my rotary encoder.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/08/20200809_195647-scaled-e1597402570329-2000.webp"><img alt="" decoding="async" height="1103" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/08/20200809_195647-scaled-e1597402570329-800.webp" srcset="/media/2020/08/20200809_195647-scaled-e1597402570329-480.webp 480w, /media/2020/08/20200809_195647-scaled-e1597402570329-800.webp 800w, /media/2020/08/20200809_195647-scaled-e1597402570329-1200.webp 1200w, /media/2020/08/20200809_195647-scaled-e1597402570329-1600.webp 1600w, /media/2020/08/20200809_195647-scaled-e1597402570329-2000.webp 2000w" width="2000"/></a><figcaption>The front of the device (right) coming together nicely</figcaption></figure>
+<p>As you can see in the photo. I then connected the components to my Arduino Nano (top, connected to the USB cable). Before long the number of wires was beginning to get out of hand. This is why I cannot stress enough, limit the amount of components in your project, if you don't this is the moment when you suddenly find yourself in a jungle of cables and things starting to fall apart.</p>
+<p>As it was I managed to get everything connected and the device working. As you can see I used a small bit of protoboard with a set of female dupont connectors soldered to it (top, to the right of the Nano) to collect my ground pins, as the Arduino doesn't have enough ground pins for all the components. For anything but the simplest of projects you will probably need to do something similar. For me this solution works better than trying to solder multiple wires together.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/08/20200809_195703-2000.webp"><img alt="ugly internals" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/08/20200809_195703-800.webp" srcset="/media/2020/08/20200809_195703-480.webp 480w, /media/2020/08/20200809_195703-800.webp 800w, /media/2020/08/20200809_195703-1200.webp 1200w, /media/2020/08/20200809_195703-1600.webp 1600w, /media/2020/08/20200809_195703-2000.webp 2000w" width="2000"/></a><figcaption>Ouch! Unfortunately this project suffers from spaghetti wire syndrome</figcaption></figure>
+<p>As you can see above, the mess of wires was beginning to get out of hand.</p>
+<p>All that was left to do was to connect the battery backpack to the front of the device, then get the box to close. I attached the positive wire from the battery to the 5V input on the Arduino Nano, then the ground wire from the battery to one of the ground pins. The two sides clicked nicely together, leaving me with the finished article. A quick test showed that all was working correctly. Yes it looks slightly ghetto, but it works! and is as sturdy as a tank.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/08/20200809_201919-scaled-e1597402640580-2000.webp"><img alt="" decoding="async" height="1196" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/08/20200809_201919-scaled-e1597402640580-800.webp" srcset="/media/2020/08/20200809_201919-scaled-e1597402640580-480.webp 480w, /media/2020/08/20200809_201919-scaled-e1597402640580-800.webp 800w, /media/2020/08/20200809_201919-scaled-e1597402640580-1200.webp 1200w, /media/2020/08/20200809_201919-scaled-e1597402640580-1600.webp 1600w, /media/2020/08/20200809_201919-scaled-e1597402640580-2000.webp 2000w" width="2000"/></a><figcaption>The finished device</figcaption></figure>
+<p>Here's a video of the final device in use demonstrated by my wife. A week after construction I've heard the alarm go off at least 7 or 8 times, so it's clearly getting used a fair bit!</p>
+<div class="embed" style="aspect-ratio: 640 / 360; max-width: calc(80vh * 640 / 360)"><iframe allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen="" loading="lazy" src="https://player.vimeo.com/video/447884676" title="Embedded video"></iframe></div>
+<h2 id="ideas-for-improvements"><a aria-hidden="true" class="h-anchor" href="#ideas-for-improvements" tabindex="-1">#</a>Ideas for improvements</h2>
+<p>Unfortunately I realised a few hours after completing the project that the LED wasn't being lit. I think perhaps when I glued it down to the shell a wire came loose. I could take it apart and reconnect the LED but honestly it isn't needed for the device to be useful, so I have decided to leave it be.</p>
+<p>I think to improve the device I would have the countdown timer mounted further back - so that the ugly white top of the display didn't stick out. I plan to paint that, but for now it's a bit of an eye sore.</p>
+<p>Modifying the device to keep tabs on multiple timers would be pretty easy - so that's an idea for version 2. Additionally I am considering using one of the ESP8266 boards which have built in wi-fi - I could then run a web server and allow users to check on the timers remotely, and also pause/set the timers remotely. This would of course potentially use a lot more power, so that's something to consider there.</p>
+<p>As for simple improvements - I like the idea of a 5 minute warning sound - that advises you that you have 5 minutes left on the countdown. Also I had the idea of adding a vibration module, in case the device needed to give a tactile alarm rather than an audible one. Though of course in its current size and form it's not like you would have it in your pocket, so being able to vibrate is of little use.</p>
+<h2 id="summary"><a aria-hidden="true" class="h-anchor" href="#summary" tabindex="-1">#</a>Summary</h2>
+<p>I'm very pleased with this project. It was completed from start to finish in around 10 hours over a weekend. Since it was completed the timer has been used several times, it's always great when you build something and it's actually used in real life!</p>
+<p>I hope you found this post interesting, please let me know if you decide to build one yourself, I'd be very interested to see photos of timers people have built.</p>
+<p>The the source code for this project can be found <a href="https://github.com/ozzeruk/DigitalCountdownTimer">on Github.</a></p>
+
+  </div>
+
+  <div class="eot wrap-prose" aria-hidden="true"><span>END OF TRANSMISSION</span></div>
+
+  <nav class="post-nav wrap-prose" aria-label="More posts">
+<a class="post-nav__link" href="/how-to-build-a-usb-gear-stick-h-shifter/"><span class="dim">&larr; older</span>How to build a USB gear stick / H-shifter</a>  </nav>
+
+  <section class="comments-archive wrap-prose" id="comments">
+    <details open>
+      <summary><span class="section-label">// archived comments <span class="dim">[2]</span></span></summary>
+      <p class="dim small">Comments from the WordPress era, kept read-only. Comments are closed.</p>
+      <ol class="comments">
+  <li class="comment" id="comment-137370">
+    <div class="comment__head">
+      <span class="comment__author">Dominik Kovacs</span>
+      <a class="comment__date" href="#comment-137370"><time datetime="2021-01-15">15 Jan 2021</time></a>
+    </div>
+    <div class="comment__body"><p>Hi,<br/>
+I was searching for exactly this! Thank you!<br/>
+But I have a grave problem: The rotary encoder isn´t working. I tried two different ones. And the  display is just giving jibberish "15u5" When I turn the encoder it shortl (some ms) changes to "19u5" but quickly reverts to "15u5". I checked the cables, encoder and pins if they are right and they are. What yould it be?</p>
+<p>Thanks in advance :)</p>
+</div>
+  </li>
+  <li class="comment" id="comment-140079">
+    <div class="comment__head">
+      <span class="comment__author">Özgür</span>
+      <a class="comment__date" href="#comment-140079"><time datetime="2022-06-12">12 Jun 2022</time></a>
+    </div>
+    <div class="comment__body"><p>"Dominik Kovacs wrote:<br/>
+But I have a grave problem: The rotary encoder isn´t working. I tried two different ones. And the display is just giving jibberish “15u5” When I turn the encoder it shortl (some ms) changes to “19u5” but quickly reverts to “15u5”. I checked the cables, encoder and pins if they are right and they are. What yould it be?"</p>
+<p>I have same problem .</p>
+</div>
+  </li>
+</ol>
+
+    </details>
+  </section>
+</article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <p class="site-footer__links">
+<a href="/articles/">articles</a><a href="/projects/">projects</a><a href="/feed.xml">rss</a><a href="/contact-me/">about</a>    </p>
+    <p class="site-footer__social">
+<a href="https://github.com/olinorwell" target="_blank" rel="me noopener"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
+<path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .32.21.7.82.58A12 12 0 0 0 12 .3"/>
+</svg>
+<span>GitHub</span></a><a href="https://x.com/OliNorwell" target="_blank" rel="me noopener"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
+<path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.65l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/>
+</svg>
+<span>X</span></a>    </p>
+    <p class="dim">&copy; 2010&ndash;2026 Oli Norwell</p>
+  </div>
+</footer>
+</body>
+</html>

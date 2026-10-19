@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to build a USB gear stick / H-shifter — Oli Norwell</title>
+<meta name="description" content="This guide will walk you through building a USB gear stick / shifter that will work with any PC racing game. I have deliberately stuck to building the simplest possible version of the device in the hope that those out…">
+<link rel="canonical" href="https://www.olinorwell.com/how-to-build-a-usb-gear-stick-h-shifter/">
+<meta name="theme-color" content="#020702">
+<meta name="color-scheme" content="dark">
+<meta property="og:site_name" content="Oli Norwell">
+<meta property="og:url" content="https://www.olinorwell.com/how-to-build-a-usb-gear-stick-h-shifter/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to build a USB gear stick / H-shifter">
+<meta property="og:description" content="This guide will walk you through building a USB gear stick / shifter that will work with any PC racing game. I have deliberately stuck to building the simplest possible version of the device in the hope that those out…">
+<meta property="og:image" content="https://www.olinorwell.com/media/2020/07/Main-1200.jpg"><meta property="article:published_time" content="2020-07-12T17:58:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/vt323-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v=4d25261308">
+<link rel="stylesheet" href="/assets/phosphor.css?v=4d25261308">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Oli Norwell" href="/feed.xml">
+<script src="/assets/site.js?v=4d25261308" defer></script>
+</head>
+<body class="theme-phosphor ">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="Oli Norwell — home">
+      <span class="brand__chip" aria-hidden="true">ON</span>
+      <span class="brand__name">Oli Norwell</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/articles/"><span class="nav__dot">./</span>articles</a>
+      <a href="/projects/"><span class="nav__dot">./</span>projects</a>
+      <a href="/feed.xml"><span class="nav__dot">./</span>rss</a>
+      <a href="/contact-me/"><span class="nav__dot">./</span>about</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="">
+<article class="post">
+  <header class="post__header wrap">
+    <p class="crumbs"><a href="/">~</a>/<a href="/">blog</a>/<span>how-to-build-a-usb-gear-stick-h-shifter</span></p>
+    <h1 class="post__title">How to build a USB gear stick / H-shifter</h1>
+    <p class="post__meta">
+      <time datetime="2020-07-12T17:58:00">12 Jul 2020</time>
+      <span class="dim">//</span> 16 min read
+<span class="dim">//</span> <a href="#comments">6 comments</a>      
+    </p>
+    <p class="tags"><a class="tag" href="/category/electronics/">#electronics</a><a class="tag" href="/category/fun/">#fun</a><a class="tag" href="/category/programming/">#software-development</a></p>
+  </header>
+
+  <figure class="post__hero">
+    <img src="/media/2020/07/Main-800.webp" srcset="/media/2020/07/Main-480.webp 480w, /media/2020/07/Main-800.webp 800w, /media/2020/07/Main-1200.webp 1200w, /media/2020/07/Main-1600.webp 1600w"
+         sizes="(min-width: 1040px) 980px, calc(100vw - 32px)"
+         width="1600" height="1141" alt="" decoding="async">
+  </figure>
+
+  <nav class="toc wrap-prose" aria-label="Contents">
+    <details>
+      <summary>contents <span class="dim">[10]</span></summary>
+      <ol><li><a href="#the-basic-concept">The basic concept</a></li><li><a href="#writing-the-software">Writing the software</a></li><li><a href="#the-build">The build</a></li><li><a href="#the-gearstick">The gearstick</a></li><li><a href="#gears-that-stick">Gears that stick</a></li><li><a href="#putting-it-all-together">Putting it all together</a></li><li><a href="#wiring">Wiring</a></li><li><a href="#testing-your-gear-shifter">Testing your gear shifter</a></li><li><a href="#final-thoughts">Final Thoughts</a></li><li><a href="#aug-14-2020-one-month-update">Aug 14 2020 - One month update</a></li></ol>
+    </details>
+  </nav>
+
+  <div class="prose">
+<p>This guide will walk you through building a USB gear stick / shifter that will work with any PC racing game. I have deliberately stuck to building the simplest possible version of the device in the hope that those out there wanting to build one can do so in the shortest time possible.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/07/2020-07-13-screenshot-1245.webp"><img alt="" decoding="async" height="964" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/07/2020-07-13-screenshot-800.webp" srcset="/media/2020/07/2020-07-13-screenshot-480.webp 480w, /media/2020/07/2020-07-13-screenshot-800.webp 800w, /media/2020/07/2020-07-13-screenshot-1200.webp 1200w, /media/2020/07/2020-07-13-screenshot-1245.webp 1245w" width="1245"/></a></figure>
+<p><em>(a YouTube video of the finished product in action is at the bottom of this post)</em></p>
+<p>What you will need</p>
+<ul>
+<li>A wooden chopping board of reasonable thickness (€1.20)</li>
+<li>MDF of the same size as the chopping board (€0.50)</li>
+<li>An Arduino Leonardo compatible board (€4 on AliExpress)</li>
+<li>An arcade style 4-direction joystick (about €7 on AliExpress)</li>
+<li>140cm M8 threaded rod (€0.80)</li>
+<li>30cm M5* threaded rod (€0.50)</li>
+<li>M8 nuts and washers (€1)</li>
+<li>M5* nuts and washers (€1)</li>
+<li>4 (or more) M8 cap nuts (€1)</li>
+<li>10 male to male 'du-pont cables' (€0.20)</li>
+<li>A collection of magnets (€7)</li>
+<li>2 x tripod size conversion blocks (€3)</li>
+<li>6 'L' shaped brackets (€3)</li>
+<li>A small breadboard (optional)</li>
+<li>Long USB lead (€2)<br/>
+<em>(* size of rod depends on your joystick mounting holes)</em></li>
+</ul>
+<p>Total cost: Around $30/€30/£30<br/>
+Time to build: 2-6 hours</p>
+<h2 id="the-basic-concept"><a aria-hidden="true" class="h-anchor" href="#the-basic-concept" tabindex="-1">#</a>The basic concept</h2>
+<p>We're going to be using an arcade style joystick as the basis for our gear stick. Now you're probably thinking, how can we make a 7 position shifter (N-1-2-3-4-5-R) with a device that can only go in 4 directions? The joystick is not analog and works by directional switches being pushed or not.</p>
+<figure class="fig fig--small"><a class="fig__link" data-lightbox="" href="/media/2020/07/Joy1-204.webp"><img alt="" decoding="async" height="202" loading="lazy" sizes="204px" src="/media/2020/07/Joy1-204.webp" srcset="/media/2020/07/Joy1-204.webp 204w" width="204"/></a></figure>
+<p>The answer is that the joystick will let us push it diagonally, which involves more than one joystick switch being selected. So for example when pushing it to the top-left, both the left and the up switches are set.</p>
+<figure class="fig fig--small"><a class="fig__link" data-lightbox="" href="/media/2020/07/Joy2-214.webp"><img alt="" decoding="async" height="220" loading="lazy" sizes="214px" src="/media/2020/07/Joy2-214.webp" srcset="/media/2020/07/Joy2-214.webp 214w" width="214"/></a></figure>
+<p>We can then implement a lookup table to decide what gear we are in based on how the 4 switches are set.</p>
+<figure class="fig fig--small"><a class="fig__link" data-lightbox="" href="/media/2020/07/Joy3-198.webp"><img alt="" decoding="async" height="248" loading="lazy" sizes="198px" src="/media/2020/07/Joy3-198.webp" srcset="/media/2020/07/Joy3-198.webp 198w" width="198"/></a></figure>
+<h2 id="writing-the-software"><a aria-hidden="true" class="h-anchor" href="#writing-the-software" tabindex="-1">#</a>Writing the software</h2>
+<p>A very useful feature of our Leonardo board is that it can be programmed to work as a keyboard, mouse or joystick. That is we can program the device's memory so that when the device is plugged into a computer, the computer 'sees' either a mouse, keyboard or joystick, rather than a microcontroller development board.</p>
+<p>The software we need to write is actually extremely simple. We will be reading whether the 4 switches on the joystick are pressed or not, and then depending on which are pressed, we can calculate what gear we are in. We can then pass that message on to the computer, which will pass it on to our game.</p>
+<p>You can download the source code <a href="/files/OTNGears.ino" rel="noopener" target="_blank">here</a>. It's also <a href="https://github.com/ozzeruk/OTNGears">on Github.</a></p>
+
+<div class="code"><div class="code__bar"><span class="code__lang">C++</span></div><pre tabindex="0"><code><span class="c1">// Gear Stick / H-shifter firmware for Arduino Leonardo compatible devices</span>
+<span class="c1">// Written by Oli Norwell (www.olinorwell.com) - 11 July 2020</span>
+<span class="c1">// The following code is released into the public domain with no warranty implied or otherwise</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Joystick.h&gt;</span><span class="w">                 </span><span class="c1">// Download library from https://github.com/MHeironimus/ArduinoJoystickLibrary</span>
+
+<span class="c1">//#define DEBUG                       // Remove the comment '//' to enable debug mode - which will</span>
+<span class="w">                                      </span><span class="c1">// output data into the serial console and disable the joystick functionality</span>
+
+<span class="n">Joystick_</span><span class="w"> </span><span class="n">Joystick</span><span class="p">;</span><span class="w">                   </span><span class="c1">// Our joystick object - (read more at https://github.com/MHeironimus/ArduinoJoystickLibrary )</span>
+
+<span class="kt">char</span><span class="w"> </span><span class="n">dir_pins</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="w"> </span><span class="p">};</span><span class="w">      </span><span class="c1">// Our directional switches are connected to Ground and also a pin on the Leonardo [LEFT,DOWN,RIGHT,UP]</span>
+<span class="w">                                      </span><span class="c1">// Note: due to how the joystick works, the relevant switches to connect to are opposite the location</span>
+<span class="w">                                      </span><span class="c1">// So for example connect LEFT/pin 8 to the switch that is on the right of your joystick</span>
+<span class="w">                                      </span><span class="c1">// Use the debug mode to see if you have wired it correctly</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w">                    </span><span class="c1">// The state of the 4 switches during this frame   (1/HIGH = not pressed,  0/LOW = pressed)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">curGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                      </span><span class="c1">// The current gear that we are in</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">lastGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                     </span><span class="c1">// The gear that we were in during the last frame (to detect a change)</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">lastChange</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w">                   </span><span class="c1">// The time when we last changed the state of our 4 switches (needed for debouncing)</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w">                          </span><span class="c1">// Our setup function - ran once when the device starts up</span>
+<span class="p">{</span>
+
+<span class="cp">#ifndef DEBUG                         </span><span class="c1">// If the #define DEBUG line at the top is commented out, then this runs</span>
+<span class="n">Joystick</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="w">                     </span><span class="c1">// Begin the joystick library</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifdef DEBUG                          </span><span class="c1">// If the #define DEBUG line at the top is not commented out, then this runs</span>
+<span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span><span class="w">                   </span><span class="c1">// This starts up the Arduino Serial communications, which we use to send info messages to the computer</span>
+<span class="cp">#endif</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w">            </span><span class="c1">// We have 4 pins that we are using to read the 4 switches on our joystick/gear stick [0,1,2,3]</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">dir_pins</span><span class="p">[</span><span class="n">a</span><span class="p">],</span><span class="w"> </span><span class="n">INPUT_PULLUP</span><span class="p">);</span><span class="w"> </span><span class="c1">// Set them to be INPUT_PULLUP - which means that by default they will be connected to HIGH/5V</span>
+<span class="w">  </span><span class="n">dir_states</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HIGH</span><span class="p">;</span><span class="w">               </span><span class="c1">// As we know that by default the pins are HIGH - we set our current states to be HIGH</span>
+<span class="w">  </span><span class="n">lastChange</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                  </span><span class="c1">// Set to 0 the lastChange values for each pin</span>
+<span class="p">}</span>
+
+<span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w">                           </span><span class="c1">// Our loop function - after the setup function, this runs then repeats forever</span>
+<span class="p">{</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w">            </span><span class="c1">// For each switch read the pin value to see if the direction is pressed</span>
+<span class="p">{</span><span class="w">                                     </span><span class="c1">// Remember when pressed it gets pulled to Ground/LOW.</span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">butState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digitalRead</span><span class="p">(</span><span class="n">dir_pins</span><span class="p">[</span><span class="n">a</span><span class="p">]);</span><span class="w">  </span><span class="c1">// Read the pin value</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">butState</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">millis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lastChange</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="c1">// If it is different that the current value we have for it</span>
+<span class="w">  </span><span class="p">{</span><span class="w">                                                              </span><span class="c1">// *** and *** it is over 50ms since we last changed it</span>
+<span class="w">  </span>
+<span class="w">      </span><span class="cp">#ifdef DEBUG                   </span><span class="c1">// This debug message is commented out - uncomment it to see in the serial monitor when</span>
+<span class="w">  </span><span class="c1">//   Serial.println("PRESS");      // each directional switch is being pressed - this is useful to see if your wiring is</span>
+<span class="w">  </span><span class="c1">//   Serial.println(a);            // correct</span>
+<span class="w">      </span><span class="cp">#endif</span>
+
+<span class="w">  </span>
+<span class="w">        </span><span class="n">lastChange</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">millis</span><span class="p">();</span><span class="w">    </span><span class="c1">// Set the moment that we last changed it to the current milisecond counter</span>
+<span class="w">        </span><span class="n">dir_states</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">butState</span><span class="p">;</span><span class="w">    </span><span class="c1">// Update the state of the directional switch to what we just read</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">lastGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">curGear</span><span class="p">;</span><span class="w">                  </span><span class="c1">// On each loop there is the possibility of our gear changing, to know if it has</span>
+<span class="w">                                     </span><span class="c1">// changed we need to remember what is was previously</span>
+
+<span class="c1">// So now depending on the combinations on directional switches we can choose the gear we are in</span>
+<span class="c1">// 0 = left  1 = down   2 = right  3 = up</span>
+<span class="k">if</span><span class="p">(</span><span class="n">dir_states</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span><span class="w"> </span><span class="n">curGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">         </span><span class="c1">// If left and up are pressed, then that's first gear</span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">dir_states</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span><span class="w"> </span><span class="n">curGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">    </span><span class="c1">// Left and down means 2nd gear</span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">dir_states</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">HIGH</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">HIGH</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span><span class="w"> </span><span class="n">curGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="c1">// If just up is pressed, that's 3rd</span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">dir_states</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">HIGH</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">HIGH</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span><span class="w"> </span><span class="n">curGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="c1">// If just down is pressed, that's 4th</span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">dir_states</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span><span class="w"> </span><span class="n">curGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="c1">// If right and up are pressed, then that's 5th</span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">dir_states</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dir_states</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LOW</span><span class="p">)</span><span class="w"> </span><span class="n">curGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w"> </span><span class="c1">// If right and down are pressed, then that's reverse/6th</span>
+<span class="k">else</span><span class="w"> </span><span class="n">curGear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// If the current gear we are in is now different than the last frame, then we need to tell the computer</span>
+<span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">lastGear</span><span class="p">)</span>
+<span class="p">{</span>
+
+<span class="c1">// If the DEBUG symbol isn't defined then that means that we aren't in our debug mode, so send joystick mesasges</span>
+<span class="cp">#ifndef DEBUG</span>
+<span class="w">  </span><span class="c1">// Depending on what gear we are currently in, we firstly ensure all the other buttons are released</span>
+<span class="w">  </span><span class="c1">// we do this as it makes no sense that you could be in multiple gears at the same time, so we ensure this can't happen</span>
+<span class="w">  </span><span class="c1">// We then send a message to 'press' one of our 7 virtual joystick button, which represent the gears including reverse, and neutral</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">releaseButton</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">pressButton</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">releaseButton</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">pressButton</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">releaseButton</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">pressButton</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">releaseButton</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">pressButton</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">releaseButton</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">pressButton</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">releaseButton</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">pressButton</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">releaseButton</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="n">Joystick</span><span class="p">.</span><span class="n">pressButton</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span>
+
+<span class="w">  </span><span class="c1">// Note: Whether we should be pressing a button for neutral is an interesting topic - some games set the gear to neutral</span>
+<span class="w">  </span><span class="c1">// when no other gears are set, others don't. Depending on the game you will either want to link button '6' to neutral or not</span>
+<span class="w">  </span>
+<span class="cp">#endif</span>
+
+<span class="c1">// If we have our debug mode set, then rather than send a joystick command we simply send a message via the serial interface</span>
+<span class="c1">// If using the Arduino IDE then this can be read by going to Tools-&gt;Serial Monitor</span>
+<span class="cp">#ifdef DEBUG</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"1st gear"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"2nd gear"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"3rd gear"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"4th gear"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"5th gear"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Reverse"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">curGear</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Neutral"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="cp">#endif</span>
+<span class="w"> </span>
+<span class="p">}</span>
+
+<span class="c1">// We then run this function again, endlessly, while our device is powered on</span>
+
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This guide won't cover how to get the software onto the Leonardo device. There are plenty of tutorials covering that on the Internet. Compile then upload the software. When the DEBUG define is enabled the software will output messages to the serial monitor rather than behave as a joystick. You can use this mode to easily test whether the wiring of your gear stick / H-shifter is working correctly</p>
+<h2 id="the-build"><a aria-hidden="true" class="h-anchor" href="#the-build" tabindex="-1">#</a>The build</h2>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200711_154746-2000.webp"><img alt="" decoding="async" height="1128" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/07/20200711_154746-800.webp" srcset="/media/2020/07/20200711_154746-480.webp 480w, /media/2020/07/20200711_154746-800.webp 800w, /media/2020/07/20200711_154746-1200.webp 1200w, /media/2020/07/20200711_154746-1600.webp 1600w, /media/2020/07/20200711_154746-2000.webp 2000w" width="2000"/></a></figure><p>Building the gear stick will probably take an entire afternoon or longer, depending on what access you have to power tools. As you can see I purchased the bottom part of the gear stick very cheaply from a local home supplies store. The other items were mostly purchased from a local DIY store. The only items that you will need to order online are the Leonardo board and joystick module. You can opt to purchase them very cheaply directly from China via AliExpress or a similar website, or if the 3-4 week delivery timescale is too long for you, both items are also available on Amazon.</p>
+<p>Firstly - you need to mount your joystick to your chopping board. Getting it straight vertically is very important, depending on your particular joystick module your mounting holes might be in different locations. I marked out the two mounting holes and then used threaded rod that I had of the correct size, with nuts and washers to mount the joystick. You want to ensure the joystick stands above the chopping board and can perform a full range of motion. Don't worry about the nuts on the underneath of the board, we will have our four larger corner mounts sticking out further and they will have cap nuts on them.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200706_203115-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2020/07/20200706_203115-800.webp" srcset="/media/2020/07/20200706_203115-480.webp 480w, /media/2020/07/20200706_203115-800.webp 800w, /media/2020/07/20200706_203115-1200.webp 1200w, /media/2020/07/20200706_203115-1600.webp 1600w, /media/2020/07/20200706_203115-2000.webp 2000w" width="2000"/></a></figure>
+<p>Next - you should cut out a section of MDF to the size of your chopping board. Then measure four points, one in each corner, that are 1.5cm from the edge. Do the same on your chopping board. We will use threaded rod to connect the chopping board/base to the top platform on which your H pattern will be cut.</p>
+<p>Then use a size 8 drill to cut the holes in both pieces of wood. Be careful to ensure you get the holes accurately drilled. It is worth double checking and taking time to do this well.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200711_161202-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2020/07/20200711_161202-800.webp" srcset="/media/2020/07/20200711_161202-480.webp 480w, /media/2020/07/20200711_161202-800.webp 800w, /media/2020/07/20200711_161202-1200.webp 1200w, /media/2020/07/20200711_161202-1600.webp 1600w, /media/2020/07/20200711_161202-2000.webp 2000w" width="2000"/></a></figure>
+<p>On the piece of MDF you now need to mark out the H pattern for your gear selection. Exactly what size of H pattern you'll need depends on how high you want your gear shifter. This will depend on whether you are sitting low down on a Playseat Challenge style setup like me, or if you are sat at a chair. I suggest you take the time to work out where your gear stick is to go, and what height it would ideally be. You can then manipulate the height of the joystick and the top part of the construction, to best fit your situation.</p>
+<p>To easily cut out your H-pattern drill large holes then use a jigsaw to carefully carve out the pattern. A rotary tool here would be useful to smoothen out the edges. For this build I was up against the clock and did not attempt to make it look good!</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200711_164059-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2020/07/20200711_164059-800.webp" srcset="/media/2020/07/20200711_164059-480.webp 480w, /media/2020/07/20200711_164059-800.webp 800w, /media/2020/07/20200711_164059-1200.webp 1200w, /media/2020/07/20200711_164059-1600.webp 1600w, /media/2020/07/20200711_164059-2000.webp 2000w" width="2000"/></a></figure>
+<p>Once completed your MDF should now look something like this. Ready to be mounted to the rest of your gearstick.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200711_201403-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/07/20200711_201403-800.webp" srcset="/media/2020/07/20200711_201403-480.webp 480w, /media/2020/07/20200711_201403-800.webp 800w, /media/2020/07/20200711_201403-1200.webp 1200w, /media/2020/07/20200711_201403-1600.webp 1600w, /media/2020/07/20200711_201403-2000.webp 2000w" width="2000"/></a></figure>
+<h2 id="the-gearstick"><a aria-hidden="true" class="h-anchor" href="#the-gearstick" tabindex="-1">#</a>The gearstick</h2>
+<p>As it comes the joystick height is just a few cm. To look like a gear stick this needs to be much longer. I unscrewed the red handle and used a tripod size conversion module to be able to connect M8 sized threaded rod to the smaller rod that comes connected to the joystick. The length of this extension rod will depend on the desired height of your overall construction. We use the much thicker rod to give the gear stick the feeling of some weight, and it also works very well with the magnets. Finally, I used another tripod rod size conversion module with a few CM of smaller threaded rod to connect the red joystick head again.</p>
+<h2 id="gears-that-stick"><a aria-hidden="true" class="h-anchor" href="#gears-that-stick" tabindex="-1">#</a>Gears that stick</h2>
+<p>When driving an actual car, changing from neutral into first gear, leaves the gear stick placed in the first gear position. You may have questioned how our joystick will work as a gear stick, seeing as when left to its own devices it returns to the central position. That is a good question, and is the principal obstacle to overcome when building a DIY gear shifter.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200711_203434-1891.webp"><img alt="" decoding="async" height="1854" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/07/20200711_203434-800.webp" srcset="/media/2020/07/20200711_203434-480.webp 480w, /media/2020/07/20200711_203434-800.webp 800w, /media/2020/07/20200711_203434-1200.webp 1200w, /media/2020/07/20200711_203434-1600.webp 1600w, /media/2020/07/20200711_203434-1891.webp 1891w" width="1891"/></a></figure>
+<p>For my design, I chose to use magnets to hold the joystick in position. We mount L brackets at the end of each part of the H shifter pattern on the underside of the top board. We then place magnets, two for each gear in my case, at each gear. You could experiment with using more or less magnets. Personally I mounted the L brackets a little far from the gear stick, it still works correctly, but I could have placed them nearer and increased the grip the magnets would have on the stick.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200711_203557-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2020/07/20200711_203557-800.webp" srcset="/media/2020/07/20200711_203557-480.webp 480w, /media/2020/07/20200711_203557-800.webp 800w, /media/2020/07/20200711_203557-1200.webp 1200w, /media/2020/07/20200711_203557-1600.webp 1600w, /media/2020/07/20200711_203557-2000.webp 2000w" width="2000"/></a></figure>
+<h2 id="putting-it-all-together"><a aria-hidden="true" class="h-anchor" href="#putting-it-all-together" tabindex="-1">#</a>Putting it all together</h2>
+<p>When you are satisfied that the height of your top board is correct and the gear stick is moving to each position and correctly being gripped by the magnets you should use nuts and washers underneath and above the top board to fix it in place. The great thing about constructions like this that use threaded rods is that adjusting the height is very easy.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200711_215644-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2020/07/20200711_215644-800.webp" srcset="/media/2020/07/20200711_215644-480.webp 480w, /media/2020/07/20200711_215644-800.webp 800w, /media/2020/07/20200711_215644-1200.webp 1200w, /media/2020/07/20200711_215644-1600.webp 1600w, /media/2020/07/20200711_215644-2000.webp 2000w" width="2000"/></a></figure>
+<p>I calculated the best height for my situation and here is how the final build looks. As you can see the stick is holding itself nicely in 3rd gear, thanks to the magnets underneath the top platform.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200712_115322-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2020/07/20200712_115322-800.webp" srcset="/media/2020/07/20200712_115322-480.webp 480w, /media/2020/07/20200712_115322-800.webp 800w, /media/2020/07/20200712_115322-1200.webp 1200w, /media/2020/07/20200712_115322-1600.webp 1600w, /media/2020/07/20200712_115322-2000.webp 2000w" width="2000"/></a></figure>
+<h2 id="wiring"><a aria-hidden="true" class="h-anchor" href="#wiring" tabindex="-1">#</a>Wiring</h2>
+<p>I am using 'jamma leads' to connect the joystick module to my Leonardo board via some 'du-pont' breadboard wires.You could just as easily use any type of wire that could be connected properly. I noticed that some joystick modules available on AliExpress now have several smaller pin connectors rather than the jamma connectors.</p>
+<p>Please do not judge my wiring in the photos! This was a prototype was I have not made any effort to organise the wiring.</p>
+<h2 id="testing-your-gear-shifter"><a aria-hidden="true" class="h-anchor" href="#testing-your-gear-shifter" tabindex="-1">#</a>Testing your gear shifter</h2>
+<p>With everything plugged in Windows should recognise your USB H-shifter as a joystick. Use the Windows 'Setup USB game controllers' dialog to test your device. If all is well then moving from gear to gear should highlight a different button. As you can see Windows lists my gear stick as 'Arduino Leonardo'.</p>
+<figure class="fig fig--small"><a class="fig__link" data-lightbox="" href="/media/2020/07/Windows-437.webp"><img alt="" decoding="async" height="390" loading="lazy" sizes="437px" src="/media/2020/07/Windows-437.webp" srcset="/media/2020/07/Windows-437.webp 437w" width="437"/></a></figure>
+<p>Here is a short video demonstrating how the finished build works. I will shortly upload a video showing the gear stick in action.</p>
+<div class="embed" style="aspect-ratio: 640 / 1138; max-width: calc(80vh * 640 / 1138)"><iframe allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen="" loading="lazy" src="https://player.vimeo.com/video/437639744" title="Embedded video"></iframe></div>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2020/07/20200712_115723-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2020/07/20200712_115723-800.webp" srcset="/media/2020/07/20200712_115723-480.webp 480w, /media/2020/07/20200712_115723-800.webp 800w, /media/2020/07/20200712_115723-1200.webp 1200w, /media/2020/07/20200712_115723-1600.webp 1600w, /media/2020/07/20200712_115723-2000.webp 2000w" width="2000"/></a></figure><p>Here is how the final setup looks next to my T300RS wheel, pedals, and Playseat Challenge. I am currently working on a video demonstrating the gear stick in use.<br/>
+</p>
+<h2 id="final-thoughts"><a aria-hidden="true" class="h-anchor" href="#final-thoughts" tabindex="-1">#</a>Final Thoughts</h2>
+<p>Please do let me know if this tutorial has been useful. I deliberately tried to make this the simplest possible version. There are so many improvements that could be made. I intend to do another build and add the following features.</p>
+<ul>
+<li>A larger unit to give room for several buttons - in fact - as buttons are cheap and there are always actions to bind to buttons in games, I might add 8 or 10. These could be used in driving simulations to control lights, the engine, the horn, the radio etc.</li>
+<li>I also plan to add some DIP switches to the build, so that I can change how the device behaves without needing to reupload the software. It would be useful to have the option to set whether neutral 'as a pressed button' was enabled or not.</li>
+<li>I might also add a socket to plug in a clutch pedal. I could then pass on the data for the clutch pedal to the computer, while using the clutch pedal position to determine if a gear change should be successful or not. Perhaps playing a rough sound if the clutch wasn't pressed correctly when the gear stick was moved, and stopping the gear change by throwing you into neutral.</li>
+<li>An LCD screen could be hooked up to show the current gear, and with a small program running on the host computer there is the potential to send back data such as speed/race position/revs etc where the game makes that information available.</li>
+</ul>
+<p>If you decide to build this, good luck! As I said during the tutorial, the most important thing is getting the joystick mounted level, everything else can be tweaked easily.</p>
+<p>Here is a video demonstrating the gear stick in use. Watch in full screen so that you can see the in-game gear graphic easily.</p>
+<div class="embed" style="aspect-ratio: 560 / 315; max-width: calc(80vh * 560 / 315)"><iframe allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen="" loading="lazy" src="https://www.youtube-nocookie.com/embed/lWDyUr7-dn4" title="Embedded video"></iframe></div>
+<h2 id="aug-14-2020-one-month-update"><a aria-hidden="true" class="h-anchor" href="#aug-14-2020-one-month-update" tabindex="-1">#</a>Aug 14 2020 - One month update</h2>
+<p>So a month later the gear stick is still working fine. The only issue is that at times it isn't "clicking" properly into first gear. I figured out that this is because the rod connecting to the joystick isn't perfectly straight, so the gear stick goes up at an angle slightly. The result of this is that occasionally pushing into first gear doesn't quite work. Resolving this will simply be a case of connecting the rod to the joystick better. A slight rotation of the gear stick solves it and so I haven't yet made that alteration.</p>
+
+  </div>
+
+  <div class="eot wrap-prose" aria-hidden="true"><span>END OF TRANSMISSION</span></div>
+
+  <nav class="post-nav wrap-prose" aria-label="More posts">
+<a class="post-nav__link" href="/9-months-with-arch-linux-i3wm/"><span class="dim">&larr; older</span>9 Months with Arch Linux + i3wm</a><a class="post-nav__link post-nav__link--next" href="/designing-and-building-a-digital-kitchen-timer/"><span class="dim">newer &rarr;</span>Designing and building a digital kitchen timer</a>  </nav>
+
+  <section class="comments-archive wrap-prose" id="comments">
+    <details open>
+      <summary><span class="section-label">// archived comments <span class="dim">[6]</span></span></summary>
+      <p class="dim small">Comments from the WordPress era, kept read-only. Comments are closed.</p>
+      <ol class="comments">
+  <li class="comment" id="comment-136718">
+    <div class="comment__head">
+      <span class="comment__author">Gonzalo Javier Di Paolo Pereyra</span>
+      <a class="comment__date" href="#comment-136718"><time datetime="2020-07-23">23 Jul 2020</time></a>
+    </div>
+    <div class="comment__body"><p>abaut this: I might also add a socket to plug in a clutch pedal. I could then pass on the data for the clutch pedal to the computer, while using the clutch pedal position to determine if a gear change should be successful or not. Perhaps playing a rough sound if the clutch wasn’t pressed correctly when the gear stick was moved, and stopping the gear change by throwing you into neutral.</p>
+<p>think on change the magnets for electromagnets, if the change  if the clutch wasn’t pressed correctly  disable the magnets and the gear change will not remain in this place</p>
+</div>
+<ol class="comments comments--nested">
+  <li class="comment comment--owner" id="comment-136719">
+    <div class="comment__head">
+      <span class="comment__author">Oli Norwell</span>
+<span class="chip">author</span>      <a class="comment__date" href="#comment-136719"><time datetime="2020-07-23">23 Jul 2020</time></a>
+    </div>
+    <div class="comment__body"><p>This would definitely be the right away to go about it. Right now I don't have enough electromagnets/solenoids. I wonder if some like this might work well: https://www.aliexpress.com/item/32815809960.html<br/>
+Perhaps for version 2 I'll investigate. I could put a reed switch under the Thrustmaster clutch pedal that I have, and a small magnet, then when the clutch was fully pressed that could feed across to my gear stick.</p>
+</div>
+  </li>
+</ol>
+  </li>
+  <li class="comment" id="comment-136726">
+    <div class="comment__head">
+      <span class="comment__author">Bobby</span>
+      <a class="comment__date" href="#comment-136726"><time datetime="2020-07-25">25 Jul 2020</time></a>
+    </div>
+    <div class="comment__body"><p>It's a shame this isn't on Github</p>
+</div>
+<ol class="comments comments--nested">
+  <li class="comment comment--owner" id="comment-136782">
+    <div class="comment__head">
+      <span class="comment__author">Oli Norwell</span>
+<span class="chip">author</span>      <a class="comment__date" href="#comment-136782"><time datetime="2020-08-13">13 Aug 2020</time></a>
+    </div>
+    <div class="comment__body"><p>https://github.com/ozzeruk/OTNGears</p>
+<p>There you go  - hope that helps</p>
+</div>
+  </li>
+</ol>
+  </li>
+  <li class="comment" id="comment-138822">
+    <div class="comment__head">
+      <span class="comment__author">ajit</span>
+      <a class="comment__date" href="#comment-138822"><time datetime="2021-12-12">12 Dec 2021</time></a>
+    </div>
+    <div class="comment__body"><p>can you give us a wiring diagram?</p>
+</div>
+  </li>
+  <li class="comment" id="comment-141124">
+    <div class="comment__head">
+      <span class="comment__author">zurawsky</span>
+      <a class="comment__date" href="#comment-141124"><time datetime="2023-11-17">17 Nov 2023</time></a>
+    </div>
+    <div class="comment__body"><p>Hey can you give some tips to wiring? I’m new in arduino and electronics.</p>
+</div>
+  </li>
+</ol>
+
+    </details>
+  </section>
+</article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <p class="site-footer__links">
+<a href="/articles/">articles</a><a href="/projects/">projects</a><a href="/feed.xml">rss</a><a href="/contact-me/">about</a>    </p>
+    <p class="site-footer__social">
+<a href="https://github.com/olinorwell" target="_blank" rel="me noopener"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
+<path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .32.21.7.82.58A12 12 0 0 0 12 .3"/>
+</svg>
+<span>GitHub</span></a><a href="https://x.com/OliNorwell" target="_blank" rel="me noopener"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
+<path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.65l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/>
+</svg>
+<span>X</span></a>    </p>
+    <p class="dim">&copy; 2010&ndash;2026 Oli Norwell</p>
+  </div>
+</footer>
+</body>
+</html>

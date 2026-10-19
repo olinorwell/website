@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How To Build A Live WiFi Web Connected Digital Scoreboard — Oli Norwell</title>
+<meta name="description" content="In this tutorial I am going to explain how I created a digital scoreboard with LEDs, a large dot-matrix display and numerical 8-digit totals. The device uses a WiFi chip to connect to the Internet to get status values…">
+<link rel="canonical" href="https://www.olinorwell.com/how-to-build-a-live-wifi-web-connected-digital-scoreboard/">
+<meta name="theme-color" content="#020702">
+<meta name="color-scheme" content="dark">
+<meta property="og:site_name" content="Oli Norwell">
+<meta property="og:url" content="https://www.olinorwell.com/how-to-build-a-live-wifi-web-connected-digital-scoreboard/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How To Build A Live WiFi Web Connected Digital Scoreboard">
+<meta property="og:description" content="In this tutorial I am going to explain how I created a digital scoreboard with LEDs, a large dot-matrix display and numerical 8-digit totals. The device uses a WiFi chip to connect to the Internet to get status values…">
+<meta property="og:image" content="https://www.olinorwell.com/media/2017/08/20170728_125541-e1502624176899-1200.jpg"><meta property="article:published_time" content="2017-08-13T11:54:00">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/vt323-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v=4d25261308">
+<link rel="stylesheet" href="/assets/phosphor.css?v=4d25261308">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Oli Norwell" href="/feed.xml">
+<script src="/assets/site.js?v=4d25261308" defer></script>
+</head>
+<body class="theme-phosphor ">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/" aria-label="Oli Norwell — home">
+      <span class="brand__chip" aria-hidden="true">ON</span>
+      <span class="brand__name">Oli Norwell</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/articles/"><span class="nav__dot">./</span>articles</a>
+      <a href="/projects/"><span class="nav__dot">./</span>projects</a>
+      <a href="/feed.xml"><span class="nav__dot">./</span>rss</a>
+      <a href="/contact-me/"><span class="nav__dot">./</span>about</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="">
+<article class="post">
+  <header class="post__header wrap">
+    <p class="crumbs"><a href="/">~</a>/<a href="/">blog</a>/<span>how-to-build-a-live-wifi-web-connected-digital-scoreboard</span></p>
+    <h1 class="post__title">How To Build A Live WiFi Web Connected Digital Scoreboard</h1>
+    <p class="post__meta">
+      <time datetime="2017-08-13T11:54:00">13 Aug 2017</time>
+      <span class="dim">//</span> 17 min read
+<span class="dim">//</span> <a href="#comments">1 comment</a>      
+    </p>
+    <p class="tags"><a class="tag" href="/category/fun/">#fun</a></p>
+  </header>
+
+  <figure class="post__hero">
+    <img src="/media/2017/08/20170728_125541-e1502624176899-800.webp" srcset="/media/2017/08/20170728_125541-e1502624176899-480.webp 480w, /media/2017/08/20170728_125541-e1502624176899-800.webp 800w, /media/2017/08/20170728_125541-e1502624176899-1200.webp 1200w, /media/2017/08/20170728_125541-e1502624176899-1600.webp 1600w"
+         sizes="(min-width: 1040px) 980px, calc(100vw - 32px)"
+         width="1600" height="2133" alt="" decoding="async">
+  </figure>
+
+  <nav class="toc wrap-prose" aria-label="Contents">
+    <details>
+      <summary>contents <span class="dim">[10]</span></summary>
+      <ol><li><a href="#arduino-live-wifi-web-scoreboard">Arduino Live Wifi Web Scoreboard</a></li><li><a href="#what-you-will-need">What You Will Need</a></li><li><a href="#preparing-the-rgb-leds">Preparing the RGB LEDs</a></li><li><a href="#preparing-led-dot-matrix-and-7-segment-displays">Preparing LED Dot-matrix and 7-Segment Displays</a></li><li><a href="#preparing-our-enclosure">Preparing Our Enclosure</a></li><li><a href="#mounting-your-components">Mounting Your Components</a></li><li><a href="#using-the-esp8266-chip">Using the ESP8266 Chip</a></li><li><a href="#wiring-up-the-device">Wiring Up the Device</a></li><li><a href="#software">Software</a></li><li><a href="#further-ideas-and-project-summary">Further Ideas and Project Summary</a></li></ol>
+    </details>
+  </nav>
+
+  <div class="prose">
+<h2 id="arduino-live-wifi-web-scoreboard"><a aria-hidden="true" class="h-anchor" href="#arduino-live-wifi-web-scoreboard" tabindex="-1">#</a>Arduino Live Wifi Web Scoreboard</h2>
+<p>In this tutorial I am going to explain how I created a digital scoreboard with LEDs, a large dot-matrix display and numerical 8-digit totals. The device uses a WiFi chip to connect to the Internet to get status values such as totals and live counts, plus statuses such as on/off for the LEDs. The device is powered by a generic USB power adaptor. Under the hood it uses an Arduino Mega compatible board, which are readily available, economical, and communicate well with the ESP8266 chips.</p>
+<p>The scoreboard is made from a wooden box, with hinges and a clip to allow for access to the internals when needed. Power usage is minimal, running the device 24/7 for a year with WiFi connections every minute will cost less than 1 euro.</p>
+<h2 id="what-you-will-need"><a aria-hidden="true" class="h-anchor" href="#what-you-will-need" tabindex="-1">#</a>What You Will Need</h2>
+<p>1 x Wooden box (€4.50 from a local store)<br/>
+1 x Arduino Mega clone - I use the <a href="http://amzn.to/2whhyfw">Elegoo</a> boards personally (€11.50 <a href="http://amzn.to/2whhyfw">from Amazon</a>)<br/>
+1 x Series of 4 dot-matrix displays (<a href="http://amzn.to/2wgQU6z">€15 from Internet</a> - though I have now seen for €5)<br/>
+1 x Sugru packet (€1.65 [1 of 8 for<a href="http://amzn.to/2wh17Qp"> €13 from Amazon</a>])<br/>
+2 x 7-Segment 8-Digit LED displays (<a href="http://amzn.to/2tZGuvr">€4 for 2 - or €12 next day delivery</a>)<br/>
+1 x Collection of 220 ohm resistors (<a href="http://amzn.to/2vowwUz">€0.25 - part of pack costing €5</a>).<br/>
+3 x RGB LEDs (<a href="http://amzn.to/2whiqRk">€0.18 - part of pack of 50 costing €3</a>)<br/>
+1 x ESP8266 chip (<a href="http://amzn.to/2voxjVB">€5</a>)<br/>
+1 x 5v &lt;&gt; 3.5v level switcher (<a href="http://amzn.to/2vofx53">€1.50</a>)<br/>
+1 x Matt black spray paint (€2 can from a local store).<br/>
+1 x Small breadboard<br/>
+'DuPont' cables and pins - (<a href="http://amzn.to/2whdV9D">€3 - usually part of any starter pack</a>)</p>
+<p>Access to a drill, box cutter, USB cable<br/>
+Cost is therefore around €50 - although existing parts could be reused, and ordering through <a href="https://www.aliexpress.com/">Aliexpress</a> for example would bring that down to nearer €30.</p>
+<p>The project takes 4 - 8 hours to complete, including waiting for the box to dry.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170729_121340-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/20170729_121340-800.webp" srcset="/media/2017/08/20170729_121340-480.webp 480w, /media/2017/08/20170729_121340-800.webp 800w, /media/2017/08/20170729_121340-1200.webp 1200w, /media/2017/08/20170729_121340-1600.webp 1600w, /media/2017/08/20170729_121340-2000.webp 2000w" width="2000"/></a></figure>
+<h2 id="preparing-the-rgb-leds"><a aria-hidden="true" class="h-anchor" href="#preparing-the-rgb-leds" tabindex="-1">#</a>Preparing the RGB LEDs</h2>
+<p>Preparing the RGB LEDs (Red-Green-Blue Light-Emitting-Diodes) is quite time consuming, but satisfying once it is completed. I am using RGB LEDs to enable me to show different colours using the 'same' LED. In reality these RGB LEDs contain 3 LEDs inside and by controlling each light you can get a mix of colour.</p>
+<p>Each LED needs a resistor in circuit, I use 220 ohm resistors with my LEDs and have never had a problem. Other tutorials may suggest different values, use whatever resistors you want, but do remember to include them, otherwise you will burn out your LEDs.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170720_212507-e1502624352386-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2017/08/20170720_212507-e1502624352386-800.webp" srcset="/media/2017/08/20170720_212507-e1502624352386-480.webp 480w, /media/2017/08/20170720_212507-e1502624352386-800.webp 800w, /media/2017/08/20170720_212507-e1502624352386-1200.webp 1200w, /media/2017/08/20170720_212507-e1502624352386-1600.webp 1600w, /media/2017/08/20170720_212507-e1502624352386-2000.webp 2000w" width="2000"/></a></figure>
+<p>I won't go into too much depth about LEDs as tutorials <a href="https://learn.sparkfun.com/tutorials/light-emitting-diodes-leds">such as this one</a> have covered the subject perfectly.</p>
+<p>What you need to do is solder a resistor to each of the three shorter legs of your RGB LED. I like to use a 'helping hands' device <a href="http://amzn.to/2v6fJVI">such as this one</a>. Firstly wrap the wires together, then solder the connection, wait 30 seconds or so and you should find the wires are strongly attached to each other. Eventually you will want to cover the connection with insulating tape or <a href="http://amzn.to/2u6ZwuU">heat shrink tubing</a>.</p>
+<p>In the second picture you can see my three RGB LEDs, after I have soldered three resistors and then further wires which will go to the Arduino. Additionally I have soldered a wire to the common pin, which returns to the ground rail.</p>
+<p>At this point you will want to connect the LEDs to your Arduino and test that they work. I would recommend following any RGB LED tutorial and cycling through the colours to check that your LEDs are performing as you wish.</p>
+<p>In my case I noticed that the green LED was much brighter than the red LED. This seems to be fairly common. If this is a problem then you might consider a larger value resistor for the green LED.</p>
+<p>Once you have 3 RGB LEDs that you can control and that successfully show red, green and blue, then continue to the next step.</p>
+<h2 id="preparing-led-dot-matrix-and-7-segment-displays"><a aria-hidden="true" class="h-anchor" href="#preparing-led-dot-matrix-and-7-segment-displays" tabindex="-1">#</a>Preparing LED Dot-matrix and 7-Segment Displays</h2>
+<p>While showing green/red LEDs is useful for displaying boolean information such as true/false, on/off, yes/no, for our scoreboard to be really interesting we are going to want to display some numbers. I am going to use two different components to show information, they are related to such a degree that we can actually wire them in sequence, and use a very minimal number of pins on our Arduino board.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170729_120631-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/20170729_120631-800.webp" srcset="/media/2017/08/20170729_120631-480.webp 480w, /media/2017/08/20170729_120631-800.webp 800w, /media/2017/08/20170729_120631-1200.webp 1200w, /media/2017/08/20170729_120631-1600.webp 1600w, /media/2017/08/20170729_120631-2000.webp 2000w" width="2000"/></a></figure>
+<p>The 8 digit display shown in the picture is similar <a href="http://amzn.to/2vSTUqb">to this one</a> - these are extremely common in Arduino starter packs and while colours vary pretty much all use the MAX7219 component which allows use to set all 8 digits using just 5 pins. Without the <a href="https://datasheets.maximintegrated.com/en/ds/MAX7219-MAX7221.pdf">MAX7219</a> component we'd need a huge number of pins and resistors to set each 7-segment digit, and that would take forever and use most if not all our Arduino pins. Another benefit of this design of 7-segment 8-digit display is that they can be daisy chained, meaning you can have up to 8 of them in sequence, again controlled by just 5 pins.</p>
+<p>The dot-matrix display is a grid of LEDs that is in effect a low resolution display, we choose which of the dots is lit and therefore can draw simple shapes, letters and numbers. Here I'm using a special component which is four of these dot-matrix displays connected together. This gives us an 32 x 8 display, on which we can display information. This counts as 4 items in our chain of 8, so you could use two of them, or in my case mix one of these with some 7-segment displays. For this dashboard I am using two, bringing my total number of chained components to 6. All driven from 5 pins on my Arduino board, and that's including one for 5v and one for ground. Pretty efficient I think!</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170729_120459-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/20170729_120459-800.webp" srcset="/media/2017/08/20170729_120459-480.webp 480w, /media/2017/08/20170729_120459-800.webp 800w, /media/2017/08/20170729_120459-1200.webp 1200w, /media/2017/08/20170729_120459-1600.webp 1600w, /media/2017/08/20170729_120459-2000.webp 2000w" width="2000"/></a></figure>
+<p>I will delve into the code required to drive these components, and display useful information, in a later step. For now, ensure that the components are wired to your Arduino board and perhaps follow any simple tutorial (of which there are many) to be sure that your components are working.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170721_221133-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/20170721_221133-800.webp" srcset="/media/2017/08/20170721_221133-480.webp 480w, /media/2017/08/20170721_221133-800.webp 800w, /media/2017/08/20170721_221133-1200.webp 1200w, /media/2017/08/20170721_221133-1600.webp 1600w, /media/2017/08/20170721_221133-2000.webp 2000w" width="2000"/></a></figure>
+<h2 id="preparing-our-enclosure"><a aria-hidden="true" class="h-anchor" href="#preparing-our-enclosure" tabindex="-1">#</a>Preparing Our Enclosure</h2>
+<p>To look the part our device needs to sit comfortably in an enclosure, where it can live and look like a piece of consumer electronics, rather than a science fair project. Most modern day devices, such as televisions, mobile phones and Blu-ray players use plastic enclosures due to its lightweight nature and consistent form. We are going to use wood, which is heavier and more brittle, but for our needs will work perfectly well.</p>
+<p>I have searched the Internet and endless DIY stores for the perfect project box. In the end I found the perfect project box in a 'Chinese bazaar shop' here in Spain. These are universally run by Chinese people (hence the name) and stock a huge range of products, pretty much all imported from China. They are a goldmine for useful items. Eventually I found one that stocked such a huge range of boxes that one was the perfect fit for my scoreboard project. The price was also excellent, coming in at just €4.50.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170722_212149-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/20170722_212149-800.webp" srcset="/media/2017/08/20170722_212149-480.webp 480w, /media/2017/08/20170722_212149-800.webp 800w, /media/2017/08/20170722_212149-1200.webp 1200w, /media/2017/08/20170722_212149-1600.webp 1600w, /media/2017/08/20170722_212149-2000.webp 2000w" width="2000"/></a></figure>
+<p>The box is made from plywood, meaning it's structurally strong but also easy to cut into using a box cutter. I tried using a jigsaw machine and a saw, but in the end found that cutting windows in these boxes is best done using a simple box cutter. My box cutter set cost just €2 from the same store.</p>
+<p>For my project I decided to have 3 RGB LEDs, evenly spaced out at the bottom of the scoreboard. I simply used a ruler to measure out evenly spaced points, then used a power drill to create a hole. I had to experiment slightly to get the right drill piece for the LEDs, you may need to create one first and then push an LED through to see that it fits snugly. Push the drill through swiftly while holding the box down using two clamps. If you don't have access to a clamp, then a friend might do! Though I strongly recommend investing in two clamps <a href="http://amzn.to/2v9ei8P">such as these</a>, they will easily pay for themselves over the years.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170722_222612-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/20170722_222612-800.webp" srcset="/media/2017/08/20170722_222612-480.webp 480w, /media/2017/08/20170722_222612-800.webp 800w, /media/2017/08/20170722_222612-1200.webp 1200w, /media/2017/08/20170722_222612-1600.webp 1600w, /media/2017/08/20170722_222612-2000.webp 2000w" width="2000"/></a></figure>
+<p>My drill was purchased for €29.99 from a typical DIY store, it's nothing too special, you really don't need anything other than a basic power drill for these projects. I imagine it will last me 20 years, so again, in the long run it's very cheap.</p>
+<p>The dox-matrix display and 7-segment 8-digit components will need windows in your box. Again I used a basic ruler and pencil to measure out the sizes and draw where the windows would go on the box. Think carefully at this stage, you will want to ensure your displays are well spaced out, creating two windows in your box close together might cause the wood to break. I would recommend at least 15mm between windows, if not more.</p>
+<p>Depending on the number of available pins on your Arduino, you could add several more windows or indeed several more holes for LEDs. The Arduino Mega compatible boards have plenty of pins available, if you are using an Arduino Uno compatible board then you will be far more limited.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170723_002206-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2017/08/20170723_002206-800.webp" srcset="/media/2017/08/20170723_002206-480.webp 480w, /media/2017/08/20170723_002206-800.webp 800w, /media/2017/08/20170723_002206-1200.webp 1200w, /media/2017/08/20170723_002206-1600.webp 1600w, /media/2017/08/20170723_002206-2000.webp 2000w" width="2000"/></a></figure>
+<p>At this point you will want to confirm which board you are using, as you should determine it's location inside the box. The reason for this is that you will need to cut a hole for the USB cable and port. I recommend using the USB port for the power as then you will be able to connect to a computer when needed to easily upload new firmware to your device. Using the barrel power socket has minimal advantages and you would still need some way to access the USB port or internal serial pins to upload new firmware. So all in all when using an Uno or Mega compatible board, I highly recommend cutting a hole for the USB port and leaving it at that.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170723_135506-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/20170723_135506-800.webp" srcset="/media/2017/08/20170723_135506-480.webp 480w, /media/2017/08/20170723_135506-800.webp 800w, /media/2017/08/20170723_135506-1200.webp 1200w, /media/2017/08/20170723_135506-1600.webp 1600w, /media/2017/08/20170723_135506-2000.webp 2000w" width="2000"/></a></figure>
+<p>The next stage is to paint your box. I used some cheap spray paint that I was able to buy for just €2 a can. This will last you several projects, and so the cost per project is much lower. Place your box inside a larger cardboard box and take it outside, carefully spray the box, wait 30 minutes or so, then carefully turn it over if it seems to have dried. Spray the rest of the box. You may want to wait a couple of hours for the box to dry before giving it a second layer of paint. Waiting for the box to dry is boring and so perhaps work on the software side of the project while it is drying.</p>
+<p>Eventually you will have a very smart looking box, with correctly sized windows for your components, and a small exit on the side for the USB port of your Arduino compatible board.</p>
+<h2 id="mounting-your-components"><a aria-hidden="true" class="h-anchor" href="#mounting-your-components" tabindex="-1">#</a>Mounting Your Components</h2>
+<p>After many experiments with screws and mounting sockets, tape and glue, I discovered <a href="http://amzn.to/2v6DFs9">Sugru</a>. I highly recommend that you save yourself many hours of messing around with drill pieces and standoffs and nails etc and just invest in some <a href="http://amzn.to/2whgybp">Sugru</a>. For those who haven't yet discovered it, it's basically a 'blu-tac' style putty that you can mould in your hands, the difference being that it goes hard after a few minutes, and sticks to a huge number of surfaces, including wood and Arduino boards and components. You place a small pea sized amount on the back of your item and push it hard onto the wood, in 24 hours that connection will be solid and surprisingly tough.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170723_171502-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2017/08/20170723_171502-800.webp" srcset="/media/2017/08/20170723_171502-480.webp 480w, /media/2017/08/20170723_171502-800.webp 800w, /media/2017/08/20170723_171502-1200.webp 1200w, /media/2017/08/20170723_171502-1600.webp 1600w, /media/2017/08/20170723_171502-2000.webp 2000w" width="2000"/></a></figure>
+<p><a href="http://amzn.to/2whgybp">Sugru</a> isn't cheap, far from it, but when you take into account the money saved on pots of screws and standoffs, it actually represents pretty good value for money.</p>
+<p>Take your Arduino compatible board and a packet of Sugru, spread the putty around a bit and place blobs of it on the underside of your board, then push the board firmly into place so that your USB port correctly lines up with the hole on the side of your box.</p>
+<p>Now I wouldn't recommend fixing your components into place until you are certain that they will work. As this tutorial is split into distinct sections I am going to assume that you have returned to this part after knowing that your scoreboard correctly works.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170723_171507-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2017/08/20170723_171507-800.webp" srcset="/media/2017/08/20170723_171507-480.webp 480w, /media/2017/08/20170723_171507-800.webp 800w, /media/2017/08/20170723_171507-1200.webp 1200w, /media/2017/08/20170723_171507-1600.webp 1600w, /media/2017/08/20170723_171507-2000.webp 2000w" width="2000"/></a></figure>
+<p>The 8-digit displays can be mounted using some Sugru on the plastic part of the connecting wire, and possibly some Sugru through any gaps between the component and your box window. Do ensure that you have them mounted the correct way up! It is safe to handle them while your device is powered up, I would suggest you do this to ensure that you place the components correctly. You can read your display while mounting it to be 100% certain it's the right way up.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170723_174134-e1502624813553-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2017/08/20170723_174134-e1502624813553-800.webp" srcset="/media/2017/08/20170723_174134-e1502624813553-480.webp 480w, /media/2017/08/20170723_174134-e1502624813553-800.webp 800w, /media/2017/08/20170723_174134-e1502624813553-1200.webp 1200w, /media/2017/08/20170723_174134-e1502624813553-1600.webp 1600w, /media/2017/08/20170723_174134-e1502624813553-2000.webp 2000w" width="2000"/></a></figure>
+<p>Later on in this tutorial you will see see why we are using a breadboard and two other chips. I mounted the breadboard using its sticky backing, which sticks extremely well to wood, and some tape to hold the WiFi chip to stop it moving too much.</p>
+<p>You may wish to use hot glue to fix the wires to your breadboard, I didn't do this but have heard that it works quite well. This may be necessary if your wires don't sit very snugly in your breadboard.</p>
+<figure class="fig fig--portrait"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170723_180605-2000.webp"><img alt="" decoding="async" height="2667" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2017/08/20170723_180605-800.webp" srcset="/media/2017/08/20170723_180605-480.webp 480w, /media/2017/08/20170723_180605-800.webp 800w, /media/2017/08/20170723_180605-1200.webp 1200w, /media/2017/08/20170723_180605-1600.webp 1600w, /media/2017/08/20170723_180605-2000.webp 2000w" width="2000"/></a></figure>
+<h2 id="using-the-esp8266-chip"><a aria-hidden="true" class="h-anchor" href="#using-the-esp8266-chip" tabindex="-1">#</a>Using the ESP8266 Chip</h2>
+<p>Our scoreboard needs to connect to the Internet to get data to display on our LED components. The Arduino Mega or Uno compatible boards do not contain on-board WiFi, and so we have to use a further component to connect our project to the Internet.</p>
+<p>The ESP8266 chip is marvellous, at around $6 in the US, or 2 for 10 euros here in Europe it is extremely good value. It's actually a complete SOC (system-on-a-chip) so in many ways is effectively 'another Arduino' style component, you can upload code to the device and use it on it's own. In this project however we wish to use it alongside our Arduino compatible board, with information being passed from the ESP8266 chip to our central board.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/wifi-2000.webp"><img alt="" decoding="async" height="866" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/wifi-800.webp" srcset="/media/2017/08/wifi-480.webp 480w, /media/2017/08/wifi-800.webp 800w, /media/2017/08/wifi-1200.webp 1200w, /media/2017/08/wifi-1600.webp 1600w, /media/2017/08/wifi-2000.webp 2000w" width="2000"/></a></figure>
+<p>This task is more complicated than it might otherwise be due to the fact that the ESP8266 runs at 3.3v not 5v like our Arduino Mega board. This means that signals sent from the ESP8266 can't simply be connected to digital pins on our Arduino, and we can't power the ESP8266 from the 5v pin on our Arduino.</p>
+<p>Fortunately we have a 3.3v pin on our Arduino which is suitable for powering the ESP8266. However, we are still left with the problem of the data pins. To solve this problem we need to use a level-converter. This small chip takes in power, ground and several communication wires and outputs the same signals having been dropped down to 3.3v. This means signals from our Arduino board get converted into a voltage that the ESP8266 board can use, and vice-versa on the return.</p>
+<p>As this setup involves several wires and multiple connections to power pins I have used a breadboard. This allows us to mount the converter chip across the divide in the breadboard, and have the top half be our '5v' zone, and the bottom half our '3.3v' zone. The power rails on each side carry 5v or 3.3v, and the ground rails themselves are connected to each other and also our Arduino.</p>
+<p>To interface with the ESP8266 chip I use a library written by Wu Pengfei - it's two files, ESP8266.cpp and ESP8266.h. It makes connecting to the chip and making a request relatively simple.</p>
+<p>Most of the explanation of my code comes alongside the code itself, so I won't go into great detail during this Instructable. However in effect what we do to interface with the chip is create a complete HTTP request in a single string, connect to the web server using TCP, then send our request. We then await the response, which we place into a string, and then pull out data from the string, in a format that we already understand.</p>
+<p>My dashboard deals with an online service that I created, your dashboard will bring in data from a different source. This could be a local web server running on your home network, or a website out on the Internet, the process is the same. If you look at roughly line 490 onwards, you'll see how I'm doing it. My method is based upon examples I found on the Internet.</p>
+<h2 id="wiring-up-the-device"><a aria-hidden="true" class="h-anchor" href="#wiring-up-the-device" tabindex="-1">#</a>Wiring Up the Device</h2>
+<p>The adjoining diagram shows how I wire up my scoreboard. Please note: I haven't attempted to create a perfectly reproducible dialog, this is to give you a rough overview of what I'm doing.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/GlideDashboard_bb-1-2000.webp"><img alt="" decoding="async" height="1046" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/GlideDashboard_bb-1-800.webp" srcset="/media/2017/08/GlideDashboard_bb-1-480.webp 480w, /media/2017/08/GlideDashboard_bb-1-800.webp 800w, /media/2017/08/GlideDashboard_bb-1-1200.webp 1200w, /media/2017/08/GlideDashboard_bb-1-1600.webp 1600w, /media/2017/08/GlideDashboard_bb-1-2000.webp 2000w" width="2000"/></a></figure>
+<p>You'll see that the wiring to the ESP8266 chip goes via the level converter which is attached to the breadboard.</p>
+<p>Several wires are needed for each LED, as they are RGB LEDs, meaning we need a wire for R(red), G(green) and B(blue), additional we have a wire back to the ground rail.</p>
+<p>Thankfully we can put the dot-matrix displays and 7-segment number components in series, meaning only one set of wires is needed.</p>
+<p>Additionally you'll see that 5v and 3.3v power wires go both to the breadboard and via the converter.</p>
+<p>I had considered moving from a breadboard to a more permanent solution like a protoboard, but in the end, this solutions works fine for this project. If you have a good quality breadboard, and (more importantly) good quality 'Dupont' jumper wires, then you can go a long way.</p>
+<p>I've read that some people like to cover the breadboard and wires in hot glue, which will hold it fixed. Dried hot glue isn't a good conductor, so the circuit should be unaffected. I haven't tried this yet but it's certainly something to consider, additionally more Sugru could be used to hold jumper wires in place.</p>
+<h2 id="software"><a aria-hidden="true" class="h-anchor" href="#software" tabindex="-1">#</a>Software</h2>
+<p>Critical to the working of the scoreboard is of course the software running on the microprocessor chip. This needs to control the ESP8266 chip and request updated data from the Internet, then interpret that data and show it visually on our LED displays.</p>
+<figure class="fig fig--normal"><a class="fig__link" data-lightbox="" href="/media/2017/08/CodeImage-1100.webp"><img alt="" decoding="async" height="1019" loading="lazy" sizes="(min-width: 800px) 720px, calc(100vw - 32px)" src="/media/2017/08/CodeImage-800.webp" srcset="/media/2017/08/CodeImage-480.webp 480w, /media/2017/08/CodeImage-800.webp 800w, /media/2017/08/CodeImage-1100.webp 1100w" width="1100"/></a></figure>
+<p>I have included full source code for my scoreboard, you will need to enter your own WiFi credentials (obviously!) and point it to a different web page. I won't go into too much detail about the web server side of things, as this is extremely flexible, and you would need to create the relevant solution for your problem.</p>
+<p>My page returns a very simple string, in the form: |$|1|1|0|51|36|2|2|1|</p>
+<p>I first look for the '|$|' pattern, if I see that then I can assume I've got the correct beginning of my string. Afterwards I move through the string, placing what I find into new strings, which then get turned into integer numbers. When I find a '|' character, I know I'm onto the next one. You can see exactly how I do this in the code.</p>
+<p>Next we have to update local variables which are being held in our dashboard. You will need a variable for each piece of information that you wish to show. In my case this is 'server 1 okay', 'server 2 okay', 'cron task done', 'current users', 'current systems', 'daily users', 'daily systems'.</p>
+<p>After re-fetching the page every 60 seconds, and converting the string returned from the web server into a series of numbers, I then update my dashboard with the new numbers.</p>
+<p>For the server statuses, and cron status, this is simply a case of setting the colour of one of the LEDs. For me green means success, red means fail, and blue means there was an issue with the connection.</p>
+<p>The two 7-segment 8-digit displays are both split into 4-digit segments, I then output my 4 pieces of data onto them. This is slightly more complicated than it looks, as I need to convert an integer number, to the actual digit for the 100s column, 10s column and digit column of the display. As you set each digit separately, this is necessary. You can see in the code how I approached this problem.</p>
+<p>The central dot-matrix display shows information that changes every 2 seconds. I have a function called displayMatrix which sets one of the 4 displays to show an 'image' that I have stored in the IMAGES[] array. This array is interesting as it was generated by a web page rather than myself.</p>
+<p>I highly recommend using the LED Matrix Editor, this page makes it very easy to create 'images' in the 8x8 format that will display correctly on your dot-matrix components. Using the page is extremely straightforward, if you click the link you will get the editor with the images from my dashboard already loaded. As you can see it's simply a case of clicking the dots to change whether they are on or off. You can easily add more images, or move the order by dragging and dropping. After making your changes, bookmark the page to be able to return to them.</p>
+<p>In the top corner of the editor you will see the definition in code for your images. Copy and paste this into your Arduino 'sketch'. Look at the code for the displayMatrix function to see how it loops through the values to set the relevant LED in the component.</p>
+<p>This pretty much sums up the code for my dashboard, further explanation is available in the source code itself. If you have any questions at all please ask them in the comments.</p>
+<h2 id="further-ideas-and-project-summary"><a aria-hidden="true" class="h-anchor" href="#further-ideas-and-project-summary" tabindex="-1">#</a>Further Ideas and Project Summary</h2>
+<p>I hope you have enjoyed reading through this tutorial, and that you are able to successfully build your own Arduino WiFi scoreboard. I think what is great about this particular project is that it could be customised in so many ways. I had a need to report live user data from a web service, your needs are likely to be very different.</p>
+<figure class="fig fig--wide"><a class="fig__link" data-lightbox="" href="/media/2017/08/20170724_210815-2000.webp"><img alt="" decoding="async" height="1500" loading="lazy" sizes="(min-width: 1040px) 980px, calc(100vw - 32px)" src="/media/2017/08/20170724_210815-800.webp" srcset="/media/2017/08/20170724_210815-480.webp 480w, /media/2017/08/20170724_210815-800.webp 800w, /media/2017/08/20170724_210815-1200.webp 1200w, /media/2017/08/20170724_210815-1600.webp 1600w, /media/2017/08/20170724_210815-2000.webp 2000w" width="2000"/></a></figure>
+<p>Some ideas for scoreboards that I have had include:</p>
+<p>A sports scoreboard showing current scores, perhaps useful for a school sports tournament.</p>
+<p>A live Bitcoin price monitor, including traditional currency conversion rates as well, and perhaps stock market values.</p>
+<p>A live weather scoreboard, showing temperatures in various cities, perhaps cycling through dozens of cities displaying one per second.</p>
+<p>A live YouTube subscriber count</p>
+<p>Real sports scores pulled from a live sports site such as Livescores.com or something like ESPN.</p>
+<p>The possibilities are endless. I wish you best of luck with your projects. Please leave any comments below.</p>
+<p>(I've also posted this to <a href="https://create.arduino.cc/projecthub/OliNorwell/arduino-live-wifi-web-scoreboard-ceac7c?ref=user&amp;ref_id=225593&amp;offset=0">Arduino</a>, <a href="https://www.instructables.com/id/Arduino-Live-Wifi-Web-Scoreboard/">Instructables,</a> <a href="https://www.hackster.io/OliNorwell/arduino-live-wifi-web-scoreboard-ceac7c">Hackster.io)</a></p>
+
+  </div>
+
+  <div class="eot wrap-prose" aria-hidden="true"><span>END OF TRANSMISSION</span></div>
+
+  <nav class="post-nav wrap-prose" aria-label="More posts">
+<a class="post-nav__link" href="/what-happens-when-youre-too-busy-to-market-your-app-or-game/"><span class="dim">&larr; older</span>What Happens When You&#39;re Too Busy To Market Your App or Game</a><a class="post-nav__link post-nav__link--next" href="/will-linux-ever-replace-windows/"><span class="dim">newer &rarr;</span>Will Linux Ever Replace Windows?</a>  </nav>
+
+  <section class="comments-archive wrap-prose" id="comments">
+    <details open>
+      <summary><span class="section-label">// archived comments <span class="dim">[1]</span></span></summary>
+      <p class="dim small">Comments from the WordPress era, kept read-only. Comments are closed.</p>
+      <ol class="comments">
+  <li class="comment" id="comment-144461">
+    <div class="comment__head">
+      <span class="comment__author">Salvador Sanchez</span>
+      <a class="comment__date" href="#comment-144461"><time datetime="2024-10-03">3 Oct 2024</time></a>
+    </div>
+    <div class="comment__body"><p>Hello, I can't seem to find the source code for the project attached. I was wondering if you still had the original source code for me to look at? Thank you.</p>
+</div>
+  </li>
+</ol>
+
+    </details>
+  </section>
+</article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <p class="site-footer__links">
+<a href="/articles/">articles</a><a href="/projects/">projects</a><a href="/feed.xml">rss</a><a href="/contact-me/">about</a>    </p>
+    <p class="site-footer__social">
+<a href="https://github.com/olinorwell" target="_blank" rel="me noopener"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
+<path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .32.21.7.82.58A12 12 0 0 0 12 .3"/>
+</svg>
+<span>GitHub</span></a><a href="https://x.com/OliNorwell" target="_blank" rel="me noopener"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
+<path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.65l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23zm-1.16 17.52h1.83L7.08 4.13H5.12z"/>
+</svg>
+<span>X</span></a>    </p>
+    <p class="dim">&copy; 2010&ndash;2026 Oli Norwell</p>
+  </div>
+</footer>
+</body>
+</html>
